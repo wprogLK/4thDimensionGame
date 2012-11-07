@@ -10,6 +10,7 @@ import java.util.Queue;
 
 import annotations.OnlyForTesting;
 
+import exceptions.GameException;
 import exceptions.InvalidColourException;
 
 import models.Player.Colour;
@@ -46,6 +47,17 @@ public class Game
 		this.currentPlayer = null;
 	}
 
+	public void play() throws GameException
+	{
+		if(this.players.size()<2)
+		{
+			throw new GameException("You'r forever alone? You can't play this game with only yourself!");
+		}
+		else
+		{
+			this.start();
+		}
+	}
 
 	public ArrayList<Player.Colour> getPossibleColours() 
 	{
@@ -99,5 +111,9 @@ public class Game
 	///////////////////
 	//PRIVATE METHODS//
 	///////////////////
-
+	
+	private void start()
+	{
+		//TODO
+	}
 }
