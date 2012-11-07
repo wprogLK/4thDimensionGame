@@ -12,7 +12,7 @@
 	<classpathentry kind="lib" path="lib/lwjgl-2.8.5/jar/lwjgl-debug.jar"/>
 	<classpathentry kind="lib" path="lib/lwjgl-2.8.5/jar/lwjgl.jar">
 		<attributes>
-			<attribute name="org.eclipse.jdt.launching.CLASSPATH_ATTR_LIBRARY_PATH_ENTRY" value="4thDimensionGame/lib/lwjgl-2.8.5/native/windows"/>
+			<attribute name="org.eclipse.jdt.launching.CLASSPATH_ATTR_LIBRARY_PATH_ENTRY" value="4thDimensionGame/lib/lwjgl-2.8.5/native/linux"/>
 		</attributes>
 	</classpathentry>
 	<classpathentry kind="lib" path="lib/lwjgl-2.8.5/jar/lzma.jar"/>

@@ -60,6 +60,8 @@ public class Game
 
 			this.players.add(player);
 			
+			this.possibleColours.remove(colourOfPlayer);
+			
 			return player;
 		}
 		else

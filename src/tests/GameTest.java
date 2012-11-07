@@ -1,5 +1,7 @@
 package tests;
 
+import java.util.Arrays;
+
 import models.Game;
 import models.Player;
 
@@ -24,7 +26,7 @@ public class GameTest
 	@Given("SimpleGameTest")
 	public Game allColoursShouldBeAvailable(Game game)
 	{
-		assert(game.getPossibleColours().equals(Player.Colour.values()));
+		assert(game.getPossibleColours().equals(Arrays.asList(Player.Colour.values())));
 		return game;
 	}
 	
@@ -43,7 +45,7 @@ public class GameTest
 		return game;
 	}
 	
-	@Given("allColoursShouldBeAvailable")
+	@Given("shouldCreatePlayerAWithColourBLUE")
 	public Game currentPlayerShouldBePlayerA(Game game)
 	{
 		assert(game.getCurrentPlayer().equals(this.playerA));
@@ -66,17 +68,17 @@ public class GameTest
 	}
 	
 	@Given("colorBlueShouldNotBeAvailable")
-//	@Test(expected=InvalidColourException.class)
+	@Test(expected=InvalidColourException.class)
 	public Game tryCreateASecondPlayerWithColourBlueShouldThrowInvalidColourException(Game game) throws InvalidColourException
 	{
 		game.createPlayer("Player B", Player.Colour.BLUE);
 		return game;
 	}
-
-	@Given("tryCreateASecondPlayerWithColourBlueShouldThrowInvalidColourException")
-	public Game gameShouldHaveOnePlayerAfterFailToCreateASecondPlayer(Game game)
-	{
-		assert(game.getNumberOfPlayers()==1);
-		return game;
-	}
+//
+//	@Given("tryCreateASecondPlayerWithColourBlueShouldThrowInvalidColourException")
+//	public Game gameShouldHaveOnePlayerAfterFailToCreateASecondPlayer(Game game)
+//	{
+//		assert(game.getNumberOfPlayers()==1);
+//		return game;
+//	}
 }
