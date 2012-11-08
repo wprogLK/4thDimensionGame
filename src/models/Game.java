@@ -5,11 +5,14 @@ package models;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Iterator;
 import java.util.LinkedList;
+import java.util.ListIterator;
 import java.util.Queue;
 
 import annotations.OnlyForTesting;
 
+import exceptions.BoardException;
 import exceptions.GameException;
 import exceptions.InvalidColourException;
 
@@ -26,20 +29,40 @@ public class Game
 	/**
 	 * @param args
 	 */
-	public static void main(String[] args) 
+	public static void main(String[] args)
 	{
-//		LinkedList<String> linkedList = new LinkedList<String>();
-//		linkedList.addFirst("C");
-//		linkedList.addFirst("B");
-//		linkedList.addFirst("B");
-//		linkedList.addFirst("A");
-//		
-//		linkedList.addLast("D");
-//		System.out.println("list before:\n"+Arrays.toString(linkedList.toArray()));
-//		linkedList.
-//		System.out.println("list after:\n"+Arrays.toString(linkedList.toArray()));
+		LinkedList<String> linkedList = new LinkedList<String>();
+		linkedList.addFirst("E");
+		linkedList.addFirst("D");
+		linkedList.addFirst("C");
+		linkedList.addFirst("B");
+		linkedList.addFirst("A");
+		
+		ListIterator<String> lIterator = linkedList.listIterator();
+		System.out.println("A:" + lIterator.next());
+		
+		System.out.println("B: " + lIterator.next());
+		
+		System.out.println("C: " + lIterator.next());
+		System.out.println("D: " + lIterator.next());
+		
+		System.out.println("prevD: " + lIterator.previous());
+		System.out.println("prevC: " + lIterator.previous());
+		lIterator.remove(); //remove C
+		System.out.println("D2: " + lIterator.next());
+		lIterator.remove(); //remove D
+		lIterator.add("NEW CD");
 		
 		
+		while(lIterator.hasPrevious())
+		{
+			lIterator.previous();
+		}
+		
+		while(lIterator.hasNext())
+		{
+			System.out.println("NEXT : " + lIterator.next());
+		}
 	}
 	
 	/**

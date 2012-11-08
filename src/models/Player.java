@@ -18,7 +18,7 @@ public class Player
 	}
 	
 	private final Colour colour;
-	private final String name;
+	private  String name;
 	/**
 	 * @param colorOfPlayer 
 	 * @param name 
