@@ -44,8 +44,8 @@ public class StateSetupGame extends State
 	public void startState() 
 	{
 		//TODO: add players
-		
-		
+		randomizePlayers();
+		this.game.addPlayers(this.players);
 	}
 	
 	public void randomizePlayers()
@@ -54,20 +54,6 @@ public class StateSetupGame extends State
 		
 	}
 	
-	////////////////
-
-	public void play() throws GameException
-	{
-		if(this.players.size()<2)
-		{
-			throw new GameException("You'r forever alone? You can't play this game with only yourself!");
-		}
-		else
-		{
-			this.start();
-		}
-	}
-
 	@OnlyForTesting
 	public ArrayList<Player.Colour> getPossibleColours() 
 	{
@@ -101,9 +87,4 @@ public class StateSetupGame extends State
 	///////////////////
 	//PRIVATE METHODS//
 	///////////////////
-	
-	private void start()
-	{
-		//TODO
-	}
 }

@@ -93,10 +93,10 @@ public class StateSetupGameTest
 		return state;
 	}
 	
-	@Given("gameShouldHaveTwoPlayers")
-	public StateSetupGame shouldPlayTheGame(StateSetupGame state) throws GameException
-	{
-		state.play();
-		return state;
-	}
+//	@Given("gameShouldHaveTwoPlayers")
+//	public StateSetupGame shouldPlayTheGame(StateSetupGame state) throws GameException
+//	{
+//		state.play();
+//		return state;
+//	}
 }

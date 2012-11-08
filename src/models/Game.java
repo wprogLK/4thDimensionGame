@@ -28,8 +28,18 @@ public class Game
 	 */
 	public static void main(String[] args) 
 	{
-		// TODO Auto-generated method stub
-
+//		LinkedList<String> linkedList = new LinkedList<String>();
+//		linkedList.addFirst("C");
+//		linkedList.addFirst("B");
+//		linkedList.addFirst("B");
+//		linkedList.addFirst("A");
+//		
+//		linkedList.addLast("D");
+//		System.out.println("list before:\n"+Arrays.toString(linkedList.toArray()));
+//		linkedList.
+//		System.out.println("list after:\n"+Arrays.toString(linkedList.toArray()));
+		
+		
 	}
 	
 	/**
@@ -72,6 +82,12 @@ public class Game
 		
 		return currentPlayer;
 	}
+	
+	public void addPlayers(ArrayList<Player> players) 
+	{
+		this.players.addAll(players);
+		
+	}
 
 	///////////////////
 	//PRIVATE METHODS//
@@ -81,6 +97,7 @@ public class Game
 	{
 		//TODO
 	}
+
 	
 	
 }
