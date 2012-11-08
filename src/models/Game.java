@@ -13,19 +13,16 @@ import annotations.OnlyForTesting;
 import exceptions.GameException;
 import exceptions.InvalidColourException;
 
-import models.Player.Colour;
-
 /**
  * @author Lukas
  *
  */
 public class Game 
-{
-	private ArrayList<Player.Colour> possibleColours;
-	
+{ 
 	private Queue<Player> players;
 	@OnlyForTesting
 	private Player currentPlayer;
+	 
 	/**
 	 * @param args
 	 */
@@ -34,15 +31,12 @@ public class Game
 		// TODO Auto-generated method stub
 
 	}
-
 	
 	/**
 	 * 
 	 */
 	public Game() 
 	{	
-		this.possibleColours = new ArrayList<Player.Colour>(Arrays.asList(Player.Colour.values()));
-		
 		this.players = new LinkedList<Player>();
 		this.currentPlayer = null;
 	}
@@ -59,29 +53,6 @@ public class Game
 		}
 	}
 
-	public ArrayList<Player.Colour> getPossibleColours() 
-	{
-		return this.possibleColours;
-	}
-
-	public Player createPlayer(String name, Player.Colour colourOfPlayer) throws InvalidColourException
-	{
-		if(this.possibleColours.contains(colourOfPlayer))
-		{
-			Player player = new Player(name,colourOfPlayer);
-
-			this.players.add(player);
-			
-			this.possibleColours.remove(colourOfPlayer);
-			
-			return player;
-		}
-		else
-		{
-			throw new InvalidColourException();
-		}
-	}
-	
 	@OnlyForTesting
 	public Player getCurrentPlayer()
 	{
@@ -102,12 +73,6 @@ public class Game
 		return currentPlayer;
 	}
 
-
-	public int getNumberOfPlayers() 
-	{
-		return this.players.size();
-	}
-	
 	///////////////////
 	//PRIVATE METHODS//
 	///////////////////
@@ -116,4 +81,6 @@ public class Game
 	{
 		//TODO
 	}
+	
+	
 }
