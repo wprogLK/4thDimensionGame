@@ -417,4 +417,43 @@ public class Board
 			//TODO throw exception
 		}
 	}
+
+	public void update(int delta) 
+	{
+		this.realCubes.get(0).update(delta);
+		
+	}
+
+	//////////
+	//RENDER//
+	//////////
+	
+	public void render()
+	{
+		this.renderRealCubes();
+		this.renderPlaceholderCubes();
+		this.renderBoard();
+	}
+
+	private void renderBoard()
+	{
+		// TODO Auto-generated method stub
+		
+	}
+
+	private void renderPlaceholderCubes() 
+	{
+		// TODO Auto-generated method stub
+		
+	}
+
+	private void renderRealCubes() 
+	{
+		this.realCubes.get(0).render();
+//		for(Cube c: this.realCubes)
+//		{
+//			c.render();
+//		}
+		
+	}
 }

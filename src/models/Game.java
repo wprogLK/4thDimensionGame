@@ -28,13 +28,16 @@ import exceptions.InvalidColourException;
  */
 public class Game 
 { 
-	private Queue<Player> players;
-	@OnlyForTesting
-	private Player currentPlayer;
-	 
 	private boolean gameOver;
 	
 	private GraphicDriver driver;
+	
+	
+	private Queue<Player> players;
+	@OnlyForTesting
+	private Player currentPlayer;
+
+	private Board board;
 	
 	public static void main(String args[])
 	{
@@ -52,7 +55,18 @@ public class Game
 		
 		this.driver = new GraphicDriver();
 		
+		initTestBoard();
+		
 		this.start();
+	}
+	
+	@OnlyForTesting
+	private void initTestBoard()
+	{
+		ArrayList<Cube> basicCubes = new ArrayList<Cube>();
+		basicCubes.add(new Cube(2,2,2));
+		
+		this.board = new Board(basicCubes);
 	}
 
 	public void play() throws GameException
@@ -111,11 +125,13 @@ public class Game
 	{
 		//TODO
 		System.out.println("Update the game here...");
+		this.board.update(delta);
 	}
 
 	private void renderGame()
 	{
 		System.out.println("Render the game here...");
+		this.board.render();
 	}
 	///////////////
 	//INNER CLASS//
@@ -221,7 +237,7 @@ public class Game
 		{
 			GL11.glMatrixMode(GL11.GL_PROJECTION);
 			GL11.glLoadIdentity();
-			GL11.glOrtho(0, this.windowWidth, 0, this.windowHeight, 1, -1);  //TODO check this! (are the values really width/height?)
+			GL11.glOrtho(0, this.windowWidth, 0, this.windowHeight, 1, -1); 
 			GL11.glMatrixMode(GL11.GL_MODELVIEW);
 		}
 		
