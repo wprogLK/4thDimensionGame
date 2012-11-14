@@ -169,53 +169,6 @@ public class Board
 		{
 			
 			this.updateCube(neighbour);
-//			if(!this.realCubes.contains(neighbour))
-//			{
-//				ArrayList<Cube>neighboursOfNeighbour = this.getNeighboursCube(neighbour.getCoordinates());
-//				
-//				boolean realNeighbourFound = false;
-//				
-//				for(Cube neighbourNeighbour:neighboursOfNeighbour)
-//				{
-////					System.out.println("NeighbourNeighbour of cube " +neighbour + " has state " + neighbourNeighbour.getState());
-//					
-//					if(neighbourNeighbour.getState().equals(CubeState.REAL))
-//					{
-////						System.out.println("real neighbour found!");
-//						
-//						realNeighbourFound = true;
-//						break;
-//					}
-//				}
-//				
-//				if(realNeighbourFound)
-//				{
-//					neighbour.setState(CubeState.PLACEHOLDER);
-//					System.out.println("neighbour is placeholder now");
-//					
-//					if(!this.possiblePositions.contains(neighbour))
-//					{
-//						System.out.println("add neighbour to placeholders");
-//						this.possiblePositions.add(neighbour);
-//					}
-//				}
-//				else
-//				{
-//					neighbour.setState(CubeState.LOCKED);
-//					System.out.println("neighbour is locked now");
-//					
-//					if(this.possiblePositions.contains(neighbour))
-//					{
-//						System.out.println("remove neighbour from placeholders");
-//						this.possiblePositions.remove(neighbour);
-//					}
-//				}
-//			
-//			}
-//			else
-//			{
-////				System.out.println("The neighbour cube is a real cube. You can't change its state indirect!");
-//			}
 		}
 	}
 	
@@ -223,9 +176,6 @@ public class Board
 	{
 		System.out.println("Update cube " + cube);
 		
-//		ArrayList<Cube>neighbours = this.getNeighboursCube(pos);
-//		for(Cube neighbour:neighbours)
-//		{
 			if(!this.realCubes.contains(cube))
 			{
 				ArrayList<Cube>neighbours = this.getNeighboursCube(cube.getCoordinates());
@@ -379,32 +329,6 @@ public class Board
 		return neighbours;
 	}
 	
-//TODO
-//	public void removeCubeAt(int x, int y, int z)
-//	{
-//		if(x>0 && x<=maxX && y>0 && y<=maxY && z>0 && z<=maxZ)
-//		{
-//			Cube c = this.board[x][y][z];
-//			
-//			if(this.possiblePositions.remove(c))
-//			{
-//				 this.board[x][y][z] = cube;
-//				 this.realCubes.add(cube);
-//			}
-//			else
-//			{
-//				//TODO throw exception
-//				System.out.println("not a possible position!");
-//			}
-//		}
-//		else
-//		{
-//			//TODO throw exception
-//			System.out.println("out of range");
-//		}
-//	
-//	}
-	
 	@OnlyForTesting
 	public Cube getCubeAt(int x,int y,int z)
 	{
@@ -464,7 +388,7 @@ public class Board
 			System.out.println("");
 		}
 	}
-
+                                                                                                                                     
 	public void removeCubeAt(int x, int y, int z) 
 	{
 		if(x>=0 && x<=maxX && y>=0 && y<=maxY && z>=0 && z<=maxZ)
@@ -473,14 +397,14 @@ public class Board
 			
 			if(this.possiblePositions.contains(oldCube))
 			{
-				System.out.println(":::::::: CURRENT STATE: " + oldCube.getState() +" is in possiblePositionsList");
+//				System.out.println(":::::::: CURRENT STATE: " + oldCube.getState() +" is in possiblePositionsList");
 				this.possiblePositions.remove(oldCube);
 				oldCube.setState(CubeState.LOCKED);
 			}
 			
 			if(this.realCubes.contains(oldCube))
 			{
-				System.out.println(":::::::: CURRENT STATE: " + oldCube.getState() +" is in realsList");
+//				System.out.println(":::::::: CURRENT STATE: " + oldCube.getState() +" is in realsList");
 				this.realCubes.remove(oldCube);
 				oldCube.setState(CubeState.LOCKED);
 			}
@@ -492,6 +416,5 @@ public class Board
 			System.out.println("ERROR: invalid position! No cube to remove!");
 			//TODO throw exception
 		}
-		
 	}
 }
