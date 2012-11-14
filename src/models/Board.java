@@ -18,61 +18,59 @@ public class Board
 	private Cube[][][] board;
 	
 	//Constrains for the dimensions of the board
-	private final int maxZ = 10;
-	private final int maxX= 10;
-	private final int maxY = 10;
+	private final int maxZ;
+	private final int maxX;
+	private final int maxY;
+	
+	private final static int defaultMaxX = 10;
+	private final static int defaultMaxY = 10;
+	private final static int defaultMaxZ = 10;
 	
 	private ArrayList<Cube> possiblePositions;
 	private ArrayList<Cube> realCubes;
 	/*
 	 * This constructor shouldn't used in the final game!
 	 */
-	public Board() 
+	public Board(int maxX, int maxY, int maxZ) 
 	{
-		this.basicInit();
-	
-		for(int x = 0; x<maxX;x++)
+		assert(maxX>0 && maxY>0 && maxZ>0);
+		
+		this.maxX = maxX;
+		this.maxY = maxY;
+		this.maxZ = maxZ;
+		
+		this.possiblePositions = new ArrayList<Cube>();
+		this.realCubes = new ArrayList<Cube>();
+		
+		this.board = new Cube[this.maxX][this.maxY][this.maxZ];
+		
+		for(int x = 0; x<this.maxX;x++)
 		{
-			for(int y = 0; y<maxY; y++)
+			for(int y = 0; y<this.maxY; y++)
 			{
-				for(int z = 0; z<maxZ; z++)
+				for(int z = 0; z<this.maxZ; z++)
 				{
 					Cube cube = new Cube(x,y,z,Cube.CubeState.LOCKED);
 					
 					this.board[x][y][z] = cube;
-//					this.possiblePositions.add(cube);
 				}
 			}
 		}
-	}
-	
-	private void basicInit()
-	{
-		this.possiblePositions = new ArrayList<Cube>();
-		this.realCubes = new ArrayList<Cube>();
-		
-		this.board = new Cube[maxX][maxY][maxZ];
 	}
 	
 	public Board(ArrayList<Cube> startCubes)
 	{
-		this.basicInit();
-		for(int x = 0; x<maxX;x++)
-		{
-			for(int y = 0; y<maxY; y++)
-			{
-				for(int z = 0; z<maxZ; z++)
-				{
-					Cube cube = new Cube(x,y,z,Cube.CubeState.LOCKED);
-					
-					this.board[x][y][z] = cube;
-				}
-			}
-		}
+		this(defaultMaxX,defaultMaxY,defaultMaxZ);
+		
 		this.addBasicCubes(startCubes);
 	}
 	
-	private void addBasicCubes(ArrayList<Cube> startCubes)
+	//PRIVATE
+	/**
+	 * This method is only for the constructor to initialize real cubes!
+	 * add cubes to the board.
+	 */
+	public void addBasicCubes(ArrayList<Cube> startCubes)
 	{
 		for(Cube cube:startCubes)
 		{
@@ -87,16 +85,23 @@ public class Board
 			if(!cubeInBoard.getState().equals(CubeState.REAL) && !this.realCubes.contains(cube))
 			{
 				this.addCube(cube, x, y, z);
-				System.out.println("cube " + cube +" added to the board!");
+//				System.out.println("cube " + cube +" added to the board!");
 			}
 			else
 			{
 				System.out.println("cube " + cube +" couldn't add to the board!");
+				//TODO exception
 			}
-				
 		}
 	}
 	
+	/**
+	 * add a cube at a specific place on the board.
+	 * @param cube
+	 * @param x
+	 * @param y
+	 * @param z
+	 */
 	public void addCubeAt(Cube cube, int x, int y, int z)
 	{
 		if(x>0 && x<=maxX && y>0 && y<=maxY && z>0 && z<=maxZ)
@@ -121,7 +126,11 @@ public class Board
 	
 	}
 	
-	private void addCube(Cube cube, int x, int y, int z)
+	//PRIVATE
+	/**
+	 * add a cube at a specific position on the board. This method is only called by addBasicCubes(...) or addCubeAt(...) method!
+	 */
+	public void addCube(Cube cube, int x, int y, int z)
 	{
 		if(x>0 && x<=maxX && y>0 && y<=maxY && z>0 && z<=maxZ)
 		{
@@ -131,17 +140,19 @@ public class Board
 			 
 			cube.setState(CubeState.REAL);
 			this.realCubes.add(cube);
-			 
+			//TODO set position of the cube! 
 			this.updateNeighbours(cube);
 		}
 		else
 		{
 			System.out.println("NOT POSSIBLE TO ADD CUBE " + cube);
+			//TODO throw exception
 		}
 		
 	}
 	
-	private void updateNeighbours(Cube cube)
+	//PRIVATE
+	public void updateNeighbours(Cube cube)
 	{
 		System.out.println("Update neighbours of cube " + cube);
 		int[] pos = cube.getCoordinates();
@@ -155,14 +166,13 @@ public class Board
 				
 				boolean realNeighbourFound = false;
 				
-				
 				for(Cube neighbourNeighbour:neighboursOfNeighbour)
 				{
-					System.out.println("NeighbourNeighbour of cube " +neighbour + " has state " + neighbourNeighbour.getState());
+//					System.out.println("NeighbourNeighbour of cube " +neighbour + " has state " + neighbourNeighbour.getState());
 					
 					if(neighbourNeighbour.getState().equals(CubeState.REAL))
 					{
-						System.out.println("real neighbour found!");
+//						System.out.println("real neighbour found!");
 						
 						realNeighbourFound = true;
 						break;
@@ -195,18 +205,13 @@ public class Board
 			}
 			else
 			{
-				System.out.println("The neighbour cube is a real cube. You can't change its state indirect!");
+//				System.out.println("The neighbour cube is a real cube. You can't change its state indirect!");
 			}
 		}
 	}
 	
-//	//In case the cube (not the neigbourCube is removed), remove it first!
-//	private boolean checkLockState(Cube neighbourCube) 
-//	{
-//		if()
-//	}
-
-	private ArrayList<Cube> getNeighboursCube(int[] posCurrentCube)
+	//PRIVATE
+	public ArrayList<Cube> getNeighboursCube(int[] posCurrentCube)
 	{
 		ArrayList<int[]> neighboursCoordinates = this.getNeighboursCoordinates(posCurrentCube);
 		
@@ -214,20 +219,18 @@ public class Board
 		
 		for(int[] coordinates:neighboursCoordinates)
 		{
-			//TODO DEBUG THIS! MAYBE getNeighboursCoordinates() TOO!!
-			FIX
-		
 			int xNeighbour = coordinates[0];
 			int yNeighbour = coordinates[1];
 			int zNeighbour = coordinates[2];
 			neighbours.add(this.board[xNeighbour][yNeighbour][zNeighbour]);
-			System.out.println("ADD NEIGHBOUR CUBE " + this.board[xNeighbour][yNeighbour][zNeighbour]);
+//			System.out.println("ADD NEIGHBOUR CUBE " + this.board[xNeighbour][yNeighbour][zNeighbour]);
 		}
 		
 		return neighbours;
 	}
 	
-	private ArrayList<int[]> getNeighboursCoordinates(int[] posCurrentCube)
+	//PRIVATE
+	public ArrayList<int[]> getNeighboursCoordinates(int[] posCurrentCube)
 	{
 		int x = posCurrentCube[0];
 		int y = posCurrentCube[1];
@@ -235,11 +238,11 @@ public class Board
 		
 		ArrayList<int[]> neighbours = new ArrayList<int[]>();
 		
-		int[] coordinateNeighbourTriple = new int[3]; 
-		
 		//LEFT
 		if(y-1>=0 && y-1<=maxY)
 		{
+			int[] coordinateNeighbourTriple = new int[3]; 
+			
 			coordinateNeighbourTriple[0] = x;
 			coordinateNeighbourTriple[1] = y-1;
 			coordinateNeighbourTriple[2] = z;
@@ -250,6 +253,8 @@ public class Board
 		//RIGHT
 		if(y+1>=0 && y+1<=maxY)
 		{
+			int[] coordinateNeighbourTriple = new int[3]; 
+		
 			coordinateNeighbourTriple[0] = x;
 			coordinateNeighbourTriple[1] = y+1;
 			coordinateNeighbourTriple[2] = z;
@@ -260,6 +265,8 @@ public class Board
 		//UP
 		if(z+1>=0 && z+1<=maxZ)
 		{
+			int[] coordinateNeighbourTriple = new int[3]; 
+			
 			coordinateNeighbourTriple[0] = x;
 			coordinateNeighbourTriple[1] = y;
 			coordinateNeighbourTriple[2] = z+1;
@@ -270,6 +277,8 @@ public class Board
 		//DOWN
 		if(z-1>=0 && z-1<=maxZ)
 		{
+			int[] coordinateNeighbourTriple = new int[3]; 
+			
 			coordinateNeighbourTriple[0] = x;
 			coordinateNeighbourTriple[1] = y;
 			coordinateNeighbourTriple[2] = z-1;
@@ -280,6 +289,8 @@ public class Board
 		//FRONT
 		if(x+1>=0 && x+1<=maxX)
 		{
+			int[] coordinateNeighbourTriple = new int[3]; 
+			
 			coordinateNeighbourTriple[0] = x+1;
 			coordinateNeighbourTriple[1] = y;
 			coordinateNeighbourTriple[2] = z;
@@ -290,6 +301,8 @@ public class Board
 		//BACK
 		if(x-1>=0 && x-1<=maxX)
 		{
+			int[] coordinateNeighbourTriple = new int[3]; 
+			
 			coordinateNeighbourTriple[0] = x-1;
 			coordinateNeighbourTriple[1] = y;
 			coordinateNeighbourTriple[2] = z;
@@ -342,5 +355,60 @@ public class Board
 	public ArrayList<Cube> getRealCubes()
 	{
 		return this.realCubes;
+	}
+	
+	public int getMaxX()
+	{
+		return this.maxX;
+	}
+	
+	public int getMaxY()
+	{
+		return this.maxY;
+	}
+	
+	public int getMaxZ()
+	{
+		return this.maxZ;
+	}
+	
+	public void showLayer(int z)
+	{
+//		Cube[][] layer = this.board[z];
+//		
+//		System.out.println("Layer " + z);
+//		
+//		for(Cube[] cubeLine: layer)
+//		{
+//			for(Cube cube:cubeLine)
+//			{
+//				System.out.print(" | " + cube + " | " ); 
+//			}
+//			System.out.println(""); 
+//		}
+		
+		System.out.println("Layer " + z);
+		
+		String s = "y: ";
+		String s2 = "x  ";
+		
+		for(int y = 0; y<this.maxY;y++)
+		{
+			s+=" | " + y + " | ";
+			s2+=" | - | ";
+		}
+		
+		System.out.println(s);
+		System.out.println(s2);
+		
+		for(int x = 0; x<this.maxX;x++)
+		{
+			System.out.print("" + x +"  ");
+			for(int y = 0; y<maxY;y++)
+			{
+				System.out.print(" | " + this.board[x][y][z].getState().getShort() + " | " ); 
+			}
+			System.out.println("");
+		}
 	}
 }

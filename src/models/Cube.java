@@ -15,9 +15,22 @@ public class Cube
 	
 	public enum CubeState
 	{
-		LOCKED,
-		PLACEHOLDER,
-		REAL;
+		
+		LOCKED("L"),
+		PLACEHOLDER("P"),
+		REAL("R");
+
+		private String shortString = "   ";
+
+		CubeState(String shortString)
+		{
+			this.shortString = shortString;
+		}
+		
+		public String getShort() 
+		{
+			return this.shortString;
+		}
 	}
 	
 	private CubeState state;

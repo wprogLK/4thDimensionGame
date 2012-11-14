@@ -31,38 +31,15 @@ public class Game
 	 */
 	public static void main(String[] args)
 	{
-		LinkedList<String> linkedList = new LinkedList<String>();
-		linkedList.addFirst("E");
-		linkedList.addFirst("D");
-		linkedList.addFirst("C");
-		linkedList.addFirst("B");
-		linkedList.addFirst("A");
+		ArrayList<Cube> basicCubes = new ArrayList<Cube>();
 		
-		ListIterator<String> lIterator = linkedList.listIterator();
-		System.out.println("A:" + lIterator.next());
+		basicCubes.add(new Cube(2,2,2));
 		
-		System.out.println("B: " + lIterator.next());
+		Board board = new Board(basicCubes);
 		
-		System.out.println("C: " + lIterator.next());
-		System.out.println("D: " + lIterator.next());
-		
-		System.out.println("prevD: " + lIterator.previous());
-		System.out.println("prevC: " + lIterator.previous());
-		lIterator.remove(); //remove C
-		System.out.println("D2: " + lIterator.next());
-		lIterator.remove(); //remove D
-		lIterator.add("NEW CD");
-		
-		
-		while(lIterator.hasPrevious())
-		{
-			lIterator.previous();
-		}
-		
-		while(lIterator.hasNext())
-		{
-			System.out.println("NEXT : " + lIterator.next());
-		}
+		board.showLayer(1);
+		board.showLayer(2);
+		board.showLayer(3);
 	}
 	
 	/**
