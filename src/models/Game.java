@@ -10,6 +10,12 @@ import java.util.LinkedList;
 import java.util.ListIterator;
 import java.util.Queue;
 
+import org.lwjgl.LWJGLException;
+import org.lwjgl.Sys;
+import org.lwjgl.opengl.Display;
+import org.lwjgl.opengl.DisplayMode;
+import org.lwjgl.opengl.GL11;
+
 import annotations.OnlyForTesting;
 
 import exceptions.BoardException;
@@ -26,20 +32,13 @@ public class Game
 	@OnlyForTesting
 	private Player currentPlayer;
 	 
-	/**
-	 * @param args
-	 */
-	public static void main(String[] args)
+	private boolean gameOver;
+	
+	private GraphicDriver driver;
+	
+	public static void main(String args[])
 	{
-		ArrayList<Cube> basicCubes = new ArrayList<Cube>();
-		
-		basicCubes.add(new Cube(2,2,2));
-		
-		Board board = new Board(basicCubes);
-		
-		board.showLayer(1);
-		board.showLayer(2);
-		board.showLayer(3);
+		new Game();
 	}
 	
 	/**
@@ -49,6 +48,11 @@ public class Game
 	{	
 		this.players = new LinkedList<Player>();
 		this.currentPlayer = null;
+		this.gameOver = false;
+		
+		this.driver = new GraphicDriver();
+		
+		this.start();
 	}
 
 	public void play() throws GameException
@@ -88,6 +92,11 @@ public class Game
 		this.players.addAll(players);
 		
 	}
+	
+	public boolean isGameOver()
+	{
+		return this.gameOver;
+	}
 
 	///////////////////
 	//PRIVATE METHODS//
@@ -95,9 +104,133 @@ public class Game
 	
 	private void start()
 	{
+		this.driver.start();
+	}
+	
+	private void updateGame(int delta)
+	{
 		//TODO
+		System.out.println("Update the game here...");
 	}
 
+	private void renderGame()
+	{
+		System.out.println("Render the game here...");
+	}
+	///////////////
+	//INNER CLASS//
+	///////////////
 	
+	private class GraphicDriver
+	{
+		private long lastFrame; //Time at the last frame
+		
+		private int fps; //frames per second
+		private long lastFPS; //last fps time
+		
+		private int windowWidth;
+		private int windowHeight;
+		
+		private int windowDefaultWidth = 800;
+		private int windowDefaultHeight = 600;
+		
+		public GraphicDriver(int windowWidth, int windowHeight)
+		{
+			this.windowWidth = windowWidth;
+			this.windowHeight = windowHeight;
+		}
+		
+		public GraphicDriver()
+		{
+			this.windowWidth = windowDefaultWidth;
+			this.windowHeight = windowDefaultHeight;
+		}
+		
+		public void start()
+		{
+			this.setupDisplay();
+			this.setupGL();
+			
+			this.getDelta();
+			this.lastFPS = this.getTime();
+			
+			this.runGameLoop();
+		}
+		
+		private void setupDisplay()
+		{
+			try
+			{
+				Display.setDisplayMode(new DisplayMode(this.windowWidth, this.windowHeight));
+				Display.create();
+			}
+			catch(LWJGLException e)
+			{
+				e.printStackTrace();
+				System.exit(0);
+			}
+		}
+		
+		private void runGameLoop()
+		{
+			while(!gameOver && !Display.isCloseRequested())
+			{
+				int delta = this.getDelta(); //for interpolation ?
+				
+				updateGame(delta);
+				this.updateFPS();
+				
+				this.prepareForRendering();
+				renderGame();
+				
+				Display.update();
+				Display.sync(60);
+			}
+			
+			Display.destroy();
+		}
+		
+		private int getDelta()
+		{
+			long time = getTime();
+			int delta = (int) (time - this.lastFrame);
+			this.lastFrame = time;
+			
+			return delta;
+		}
+		
+		private long getTime()
+		{
+			return (Sys.getTime()*1000)/Sys.getTimerResolution();
+		}
+		
+		private void updateFPS()
+		{
+			if(this.getTime() - lastFPS >1000)
+			{
+				Display.setTitle("FPS: " + fps);
+				fps = 0;
+				
+				this.lastFPS +=1000;
+			}
+			
+			this.fps++;
+		}
+		
+		private void setupGL()
+		{
+			GL11.glMatrixMode(GL11.GL_PROJECTION);
+			GL11.glLoadIdentity();
+			GL11.glOrtho(0, this.windowWidth, 0, this.windowHeight, 1, -1);  //TODO check this! (are the values really width/height?)
+			GL11.glMatrixMode(GL11.GL_MODELVIEW);
+		}
+		
+		private void prepareForRendering()
+		{
+			GL11.glClear(GL11.GL_COLOR_BUFFER_BIT | GL11.GL_DEPTH_BUFFER_BIT);
+			GL11.glColor3f(0.5f, 0.5f, 1.0f);
+		}
+		
+	}
 	
 }
