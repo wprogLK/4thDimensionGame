@@ -45,7 +45,6 @@ public class BoardTest
 		
 		Board board = new Board(basicCubes);
 		
-		board.showLayer(1);
 		return board;
 	}
 	
@@ -128,9 +127,173 @@ public class BoardTest
 		return board;
 	}
 	
+	@Given("boardShouldHaveOneRealCubeAt2_2_2")
+	public Board addCubeAt1_2_2(Board board)
+	{
+		Cube c = new Cube(1,2,2);
+	
+		board.addCubeAt(c, 1, 2, 2);
+		
+		return board;
+	}
+	
+	@Given("addCubeAt1_2_2")
+	public Board boardShouldHave10Placeholders(Board board)
+	{
+		assert(board.getPlaceholderCubes().size()==10);
+		
+		return board;
+	}
+	
+	@Given("addCubeAt1_2_2")
+	public Board boardShouldHave2RealCubes(Board board)
+	{
+		assert(board.getRealCubes().size()==2);
+		
+		return board;
+	}
+	
+	@Given("addCubeAt1_2_2")
+	public Board checkCubesAfterAddCubeAt1_2_2(Board board)
+	{
+		assert(board.getCubeAt(1, 2, 2).getState().equals(CubeState.REAL));
+		assert(board.getCubeAt(3, 2, 2).getState().equals(CubeState.PLACEHOLDER));
+		assert(board.getCubeAt(2, 1, 2).getState().equals(CubeState.PLACEHOLDER));
+		assert(board.getCubeAt(2, 3, 2).getState().equals(CubeState.PLACEHOLDER));
+		assert(board.getCubeAt(2, 2, 1).getState().equals(CubeState.PLACEHOLDER));
+		assert(board.getCubeAt(2, 2, 3).getState().equals(CubeState.PLACEHOLDER));
+		
+		assert(board.getCubeAt(0, 2, 2).getState().equals(CubeState.PLACEHOLDER));
+		assert(board.getCubeAt(2, 2, 2).getState().equals(CubeState.REAL));
+		assert(board.getCubeAt(1, 1, 2).getState().equals(CubeState.PLACEHOLDER));
+		assert(board.getCubeAt(1, 3, 2).getState().equals(CubeState.PLACEHOLDER));
+		assert(board.getCubeAt(1, 2, 1).getState().equals(CubeState.PLACEHOLDER));
+		assert(board.getCubeAt(1, 2, 3).getState().equals(CubeState.PLACEHOLDER));
+		
+		return board;
+	}
+	
+	@Given("checkCubesAfterAddCubeAt1_2_2")
+	public Board addCubeAdd0_2_2(Board board)
+	{
+		Cube c = new Cube(0,2,2);
+		board.addCubeAt(c, 0, 2, 2); //TODO DEBUG 
+		FIX
+		
+		return board;
+	}
+	
+	@Given("addCubeAdd0_2_2")
+	public Board boardShouldHave14Placeholders(Board board)
+	{
+		
+		System.out.println("SIZE 14:" );
+		
+		for(Cube c:board.getPlaceholderCubes())
+		{
+			System.out.println( c );
+		}
+		
+		for(Cube c:board.getRealCubes())
+		{
+			System.out.println( c );
+		}
+		
+		assertThat(board.getPlaceholderCubes().size(),equalTo(14));
+
+		return board;
+	}
+	
+	@Given("addCubeAdd0_2_2")
+	public Board boardShouldHave3RealCubes(Board board)
+	{
+		assert(board.getRealCubes().size()==3);
+		
+		return board;
+	}
+	
+	@Given("addCubeAdd0_2_2")
+	public Board checkCubesAfterAddCubeAt0_2_2(Board board)
+	{
+		assert(board.getCubeAt(1, 2, 2).getState().equals(CubeState.REAL));
+		assert(board.getCubeAt(3, 2, 2).getState().equals(CubeState.PLACEHOLDER));
+		assert(board.getCubeAt(2, 1, 2).getState().equals(CubeState.PLACEHOLDER));
+		assert(board.getCubeAt(2, 3, 2).getState().equals(CubeState.PLACEHOLDER));
+		assert(board.getCubeAt(2, 2, 1).getState().equals(CubeState.PLACEHOLDER));
+		assert(board.getCubeAt(2, 2, 3).getState().equals(CubeState.PLACEHOLDER));
+		
+		assert(board.getCubeAt(0, 2, 2).getState().equals(CubeState.PLACEHOLDER));
+		assert(board.getCubeAt(2, 2, 2).getState().equals(CubeState.REAL));
+		assert(board.getCubeAt(1, 1, 2).getState().equals(CubeState.PLACEHOLDER));
+		assert(board.getCubeAt(1, 3, 2).getState().equals(CubeState.PLACEHOLDER));
+		assert(board.getCubeAt(1, 2, 1).getState().equals(CubeState.PLACEHOLDER));
+		assert(board.getCubeAt(1, 2, 3).getState().equals(CubeState.PLACEHOLDER));
+		
+//		assert(board.getCubeAt(0, 1, 2).getState().equals(CubeState.PLACEHOLDER));
+//		assert(board.getCubeAt(0, 3, 2).getState().equals(CubeState.PLACEHOLDER));
+		assert(board.getCubeAt(0, 2, 1).getState().equals(CubeState.PLACEHOLDER));
+		assert(board.getCubeAt(0, 2, 3).getState().equals(CubeState.PLACEHOLDER));
+		
+//		board.showLayer(0);
+//		board.showLayer(1);
+//		board.showLayer(2);
+//		board.showLayer(3);
+		
+		return board;
+	}
+	
+	////////////////////
+	//REMOVE CUBE TEST//
+	////////////////////
+	
+	@Ignore
+	@Test
+	public Board removeCubeTest()
+	{
+		ArrayList<Cube> basicCubes = new ArrayList<Cube>();
+		
+		basicCubes.add(new Cube(2,2,2));
+		basicCubes.add(new Cube(1,2,2));
+		basicCubes.add(new Cube(0,2,2));
+		
+		Board board = new Board(basicCubes);
+		return board;
+	}
+	
+	@Given("removeCubeTest")
+	public Board checkBoard(Board board)
+	{
+		assertThat(board.getRealCubes().size(),equalTo(3));
+		assertThat(board.getPlaceholderCubes().size(),equalTo(14));
+		
+		assert(board.getCubeAt(1, 2, 2).getState().equals(CubeState.REAL));
+		assert(board.getCubeAt(3, 2, 2).getState().equals(CubeState.PLACEHOLDER));
+		assert(board.getCubeAt(2, 1, 2).getState().equals(CubeState.PLACEHOLDER));
+		assert(board.getCubeAt(2, 3, 2).getState().equals(CubeState.PLACEHOLDER));
+		assert(board.getCubeAt(2, 2, 1).getState().equals(CubeState.PLACEHOLDER));
+		assert(board.getCubeAt(2, 2, 3).getState().equals(CubeState.PLACEHOLDER));
+		
+		assert(board.getCubeAt(0, 2, 2).getState().equals(CubeState.REAL));
+		assert(board.getCubeAt(2, 2, 2).getState().equals(CubeState.REAL));
+		assert(board.getCubeAt(1, 1, 2).getState().equals(CubeState.PLACEHOLDER));
+		assert(board.getCubeAt(1, 3, 2).getState().equals(CubeState.PLACEHOLDER));
+		assert(board.getCubeAt(1, 2, 1).getState().equals(CubeState.PLACEHOLDER));
+		assert(board.getCubeAt(1, 2, 3).getState().equals(CubeState.PLACEHOLDER));
+		
+		assert(board.getCubeAt(0, 1, 2).getState().equals(CubeState.PLACEHOLDER));
+		assert(board.getCubeAt(0, 3, 2).getState().equals(CubeState.PLACEHOLDER));
+		assert(board.getCubeAt(0, 2, 1).getState().equals(CubeState.PLACEHOLDER));
+		assert(board.getCubeAt(0, 2, 3).getState().equals(CubeState.PLACEHOLDER));
+		
+		return board;
+	}
+	
+	
+	
 	////////////////////
 	//BASIC BOARD TEST//
 	////////////////////
+	
 	@Ignore
 	@Test
 	public Board basicBoardTest()

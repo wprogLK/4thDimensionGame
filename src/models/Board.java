@@ -35,9 +35,9 @@ public class Board
 	{
 		assert(maxX>0 && maxY>0 && maxZ>0);
 		
-		this.maxX = maxX;
-		this.maxY = maxY;
-		this.maxZ = maxZ;
+		this.maxX = maxX+1;
+		this.maxY = maxY+1;
+		this.maxZ = maxZ+1;
 		
 		this.possiblePositions = new ArrayList<Cube>();
 		this.realCubes = new ArrayList<Cube>();
@@ -132,7 +132,7 @@ public class Board
 	 */
 	public void addCube(Cube cube, int x, int y, int z)
 	{
-		if(x>0 && x<=maxX && y>0 && y<=maxY && z>0 && z<=maxZ)
+		if(x>=0 && x<=maxX && y>=0 && y<=maxY && z>=0 && z<=maxZ)
 		{
 			System.out.println("ADD CUBE " + cube);
 			
@@ -160,17 +160,76 @@ public class Board
 		ArrayList<Cube>neighbours = this.getNeighboursCube(pos);
 		for(Cube neighbour:neighbours)
 		{
-			if(!this.realCubes.contains(neighbour))
+			
+			this.updateCube(neighbour);
+//			if(!this.realCubes.contains(neighbour))
+//			{
+//				ArrayList<Cube>neighboursOfNeighbour = this.getNeighboursCube(neighbour.getCoordinates());
+//				
+//				boolean realNeighbourFound = false;
+//				
+//				for(Cube neighbourNeighbour:neighboursOfNeighbour)
+//				{
+////					System.out.println("NeighbourNeighbour of cube " +neighbour + " has state " + neighbourNeighbour.getState());
+//					
+//					if(neighbourNeighbour.getState().equals(CubeState.REAL))
+//					{
+////						System.out.println("real neighbour found!");
+//						
+//						realNeighbourFound = true;
+//						break;
+//					}
+//				}
+//				
+//				if(realNeighbourFound)
+//				{
+//					neighbour.setState(CubeState.PLACEHOLDER);
+//					System.out.println("neighbour is placeholder now");
+//					
+//					if(!this.possiblePositions.contains(neighbour))
+//					{
+//						System.out.println("add neighbour to placeholders");
+//						this.possiblePositions.add(neighbour);
+//					}
+//				}
+//				else
+//				{
+//					neighbour.setState(CubeState.LOCKED);
+//					System.out.println("neighbour is locked now");
+//					
+//					if(this.possiblePositions.contains(neighbour))
+//					{
+//						System.out.println("remove neighbour from placeholders");
+//						this.possiblePositions.remove(neighbour);
+//					}
+//				}
+//			
+//			}
+//			else
+//			{
+////				System.out.println("The neighbour cube is a real cube. You can't change its state indirect!");
+//			}
+		}
+	}
+	
+	private void updateCube(Cube cube)
+	{
+		System.out.println("Update cube " + cube);
+		
+//		ArrayList<Cube>neighbours = this.getNeighboursCube(pos);
+//		for(Cube neighbour:neighbours)
+//		{
+			if(!this.realCubes.contains(cube))
 			{
-				ArrayList<Cube>neighboursOfNeighbour = this.getNeighboursCube(neighbour.getCoordinates());
+				ArrayList<Cube>neighbours = this.getNeighboursCube(cube.getCoordinates());
 				
 				boolean realNeighbourFound = false;
 				
-				for(Cube neighbourNeighbour:neighboursOfNeighbour)
+				for(Cube neighbour:neighbours)
 				{
 //					System.out.println("NeighbourNeighbour of cube " +neighbour + " has state " + neighbourNeighbour.getState());
 					
-					if(neighbourNeighbour.getState().equals(CubeState.REAL))
+					if(neighbour.getState().equals(CubeState.REAL))
 					{
 //						System.out.println("real neighbour found!");
 						
@@ -181,24 +240,24 @@ public class Board
 				
 				if(realNeighbourFound)
 				{
-					neighbour.setState(CubeState.PLACEHOLDER);
-					System.out.println("neighbour is placeholder now");
+					cube.setState(CubeState.PLACEHOLDER);
+					System.out.println("cube is placeholder now");
 					
-					if(!this.possiblePositions.contains(neighbour))
+					if(!this.possiblePositions.contains(cube))
 					{
-						System.out.println("add neighbour to placeholders");
-						this.possiblePositions.add(neighbour);
+						System.out.println("add cube to placeholders");
+						this.possiblePositions.add(cube);
 					}
 				}
 				else
 				{
-					neighbour.setState(CubeState.LOCKED);
-					System.out.println("neighbour is locked now");
+					cube.setState(CubeState.LOCKED);
+					System.out.println("cube is locked now");
 					
-					if(this.possiblePositions.contains(neighbour))
+					if(this.possiblePositions.contains(cube))
 					{
-						System.out.println("remove neighbour from placeholders");
-						this.possiblePositions.remove(neighbour);
+						System.out.println("remove cube from placeholders");
+						this.possiblePositions.remove(cube);
 					}
 				}
 			
@@ -207,7 +266,7 @@ public class Board
 			{
 //				System.out.println("The neighbour cube is a real cube. You can't change its state indirect!");
 			}
-		}
+		
 	}
 	
 	//PRIVATE
@@ -374,19 +433,6 @@ public class Board
 	
 	public void showLayer(int z)
 	{
-//		Cube[][] layer = this.board[z];
-//		
-//		System.out.println("Layer " + z);
-//		
-//		for(Cube[] cubeLine: layer)
-//		{
-//			for(Cube cube:cubeLine)
-//			{
-//				System.out.print(" | " + cube + " | " ); 
-//			}
-//			System.out.println(""); 
-//		}
-		
 		System.out.println("Layer " + z);
 		
 		String s = "y: ";
