@@ -104,7 +104,7 @@ public class Board
 	 */
 	public void addCubeAt(Cube cube, int x, int y, int z)
 	{
-		if(x>0 && x<=maxX && y>0 && y<=maxY && z>0 && z<=maxZ)
+		if(x>=0 && x<=maxX && y>=0 && y<=maxY && z>=0 && z<=maxZ)
 		{
 			Cube c = this.board[x][y][z];
 			
@@ -115,7 +115,7 @@ public class Board
 			else
 			{
 				//TODO throw exception
-				System.out.println("not a possible position!");
+				System.out.println("--------------------not a possible position!-----------------------");
 			}
 		}
 		else
@@ -134,6 +134,13 @@ public class Board
 	{
 		if(x>=0 && x<=maxX && y>=0 && y<=maxY && z>=0 && z<=maxZ)
 		{
+			Cube oldCube = this.board[x][y][z];
+			
+			if(this.possiblePositions.contains(oldCube))
+			{
+				this.possiblePositions.remove(oldCube);
+			}
+			
 			System.out.println("ADD CUBE " + cube);
 			
 			this.board[x][y][z] = cube;
@@ -456,5 +463,35 @@ public class Board
 			}
 			System.out.println("");
 		}
+	}
+
+	public void removeCubeAt(int x, int y, int z) 
+	{
+		if(x>=0 && x<=maxX && y>=0 && y<=maxY && z>=0 && z<=maxZ)
+		{
+			Cube oldCube = this.board[x][y][z];
+			
+			if(this.possiblePositions.contains(oldCube))
+			{
+				System.out.println(":::::::: CURRENT STATE: " + oldCube.getState() +" is in possiblePositionsList");
+				this.possiblePositions.remove(oldCube);
+				oldCube.setState(CubeState.LOCKED);
+			}
+			
+			if(this.realCubes.contains(oldCube))
+			{
+				System.out.println(":::::::: CURRENT STATE: " + oldCube.getState() +" is in realsList");
+				this.realCubes.remove(oldCube);
+				oldCube.setState(CubeState.LOCKED);
+			}
+			this.updateCube(oldCube);
+			this.updateNeighbours(oldCube);
+		}
+		else
+		{
+			System.out.println("ERROR: invalid position! No cube to remove!");
+			//TODO throw exception
+		}
+		
 	}
 }

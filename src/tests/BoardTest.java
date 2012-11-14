@@ -35,7 +35,6 @@ public class BoardTest
 	//SIMPLE BOARD TEST//
 	/////////////////////
 	
-//	@Ignore
 	@Test
 	public Board SimpleBoardTest() 
 	{
@@ -177,29 +176,15 @@ public class BoardTest
 	public Board addCubeAdd0_2_2(Board board)
 	{
 		Cube c = new Cube(0,2,2);
-		board.addCubeAt(c, 0, 2, 2); //TODO DEBUG 
-		FIX
+		board.addCubeAt(c, 0, 2, 2); 
 		
 		return board;
 	}
 	
 	@Given("addCubeAdd0_2_2")
-	public Board boardShouldHave14Placeholders(Board board)
+	public Board boardShouldHave13Placeholders(Board board)
 	{
-		
-		System.out.println("SIZE 14:" );
-		
-		for(Cube c:board.getPlaceholderCubes())
-		{
-			System.out.println( c );
-		}
-		
-		for(Cube c:board.getRealCubes())
-		{
-			System.out.println( c );
-		}
-		
-		assertThat(board.getPlaceholderCubes().size(),equalTo(14));
+		assertThat(board.getPlaceholderCubes().size(),equalTo(13));
 
 		return board;
 	}
@@ -222,22 +207,17 @@ public class BoardTest
 		assert(board.getCubeAt(2, 2, 1).getState().equals(CubeState.PLACEHOLDER));
 		assert(board.getCubeAt(2, 2, 3).getState().equals(CubeState.PLACEHOLDER));
 		
-		assert(board.getCubeAt(0, 2, 2).getState().equals(CubeState.PLACEHOLDER));
+		assert(board.getCubeAt(0, 2, 2).getState().equals(CubeState.REAL));
 		assert(board.getCubeAt(2, 2, 2).getState().equals(CubeState.REAL));
 		assert(board.getCubeAt(1, 1, 2).getState().equals(CubeState.PLACEHOLDER));
 		assert(board.getCubeAt(1, 3, 2).getState().equals(CubeState.PLACEHOLDER));
 		assert(board.getCubeAt(1, 2, 1).getState().equals(CubeState.PLACEHOLDER));
 		assert(board.getCubeAt(1, 2, 3).getState().equals(CubeState.PLACEHOLDER));
 		
-//		assert(board.getCubeAt(0, 1, 2).getState().equals(CubeState.PLACEHOLDER));
-//		assert(board.getCubeAt(0, 3, 2).getState().equals(CubeState.PLACEHOLDER));
+		assert(board.getCubeAt(0, 1, 2).getState().equals(CubeState.PLACEHOLDER));
+		assert(board.getCubeAt(0, 3, 2).getState().equals(CubeState.PLACEHOLDER));
 		assert(board.getCubeAt(0, 2, 1).getState().equals(CubeState.PLACEHOLDER));
 		assert(board.getCubeAt(0, 2, 3).getState().equals(CubeState.PLACEHOLDER));
-		
-//		board.showLayer(0);
-//		board.showLayer(1);
-//		board.showLayer(2);
-//		board.showLayer(3);
 		
 		return board;
 	}
@@ -246,7 +226,6 @@ public class BoardTest
 	//REMOVE CUBE TEST//
 	////////////////////
 	
-	@Ignore
 	@Test
 	public Board removeCubeTest()
 	{
@@ -257,6 +236,7 @@ public class BoardTest
 		basicCubes.add(new Cube(0,2,2));
 		
 		Board board = new Board(basicCubes);
+		
 		return board;
 	}
 	
@@ -264,7 +244,7 @@ public class BoardTest
 	public Board checkBoard(Board board)
 	{
 		assertThat(board.getRealCubes().size(),equalTo(3));
-		assertThat(board.getPlaceholderCubes().size(),equalTo(14));
+		assertThat(board.getPlaceholderCubes().size(),equalTo(13));
 		
 		assert(board.getCubeAt(1, 2, 2).getState().equals(CubeState.REAL));
 		assert(board.getCubeAt(3, 2, 2).getState().equals(CubeState.PLACEHOLDER));
@@ -288,13 +268,84 @@ public class BoardTest
 		return board;
 	}
 	
+	@Given("checkBoard")
+	public Board removeCubeAt1_2_2(Board board)
+	{
+		board.removeCubeAt(1,2,2);
+		
+		return board;
+	}
+	
+	@Given("removeCubeAt1_2_2")
+	public Board checkBoardAfterRemoveCubeAt1_2_2(Board board)
+	{
+		assertThat(board.getRealCubes().size(),equalTo(2));
+		assertThat(board.getPlaceholderCubes().size(),equalTo(10));
+		
+		assert(board.getCubeAt(1, 2, 2).getState().equals(CubeState.PLACEHOLDER));
+		assert(board.getCubeAt(3, 2, 2).getState().equals(CubeState.PLACEHOLDER));
+		assert(board.getCubeAt(2, 1, 2).getState().equals(CubeState.PLACEHOLDER));
+		assert(board.getCubeAt(2, 3, 2).getState().equals(CubeState.PLACEHOLDER));
+		assert(board.getCubeAt(2, 2, 1).getState().equals(CubeState.PLACEHOLDER));
+		assert(board.getCubeAt(2, 2, 3).getState().equals(CubeState.PLACEHOLDER));
+		
+		assert(board.getCubeAt(0, 2, 2).getState().equals(CubeState.REAL));
+		assert(board.getCubeAt(2, 2, 2).getState().equals(CubeState.REAL));
+		assert(board.getCubeAt(1, 1, 2).getState().equals(CubeState.LOCKED));
+		assert(board.getCubeAt(1, 3, 2).getState().equals(CubeState.LOCKED));
+		assert(board.getCubeAt(1, 2, 1).getState().equals(CubeState.LOCKED));
+		assert(board.getCubeAt(1, 2, 3).getState().equals(CubeState.LOCKED));
+		
+		assert(board.getCubeAt(0, 1, 2).getState().equals(CubeState.PLACEHOLDER));
+		assert(board.getCubeAt(0, 3, 2).getState().equals(CubeState.PLACEHOLDER));
+		assert(board.getCubeAt(0, 2, 1).getState().equals(CubeState.PLACEHOLDER));
+		assert(board.getCubeAt(0, 2, 3).getState().equals(CubeState.PLACEHOLDER));
+		
+		return board;
+	}
+	
+	@Given("checkBoardAfterRemoveCubeAt1_2_2")
+	public Board removeCubeAt2_2_2(Board board)
+	{
+		board.removeCubeAt(2,2,2);
+		
+		return board;
+	}
+	
+	@Given("removeCubeAt2_2_2")
+	public Board checkBoardAfterRemoveCubeAt2_2_2(Board board)
+	{
+		assertThat(board.getRealCubes().size(),equalTo(1));
+		assertThat(board.getPlaceholderCubes().size(),equalTo(5));
+		
+		assert(board.getCubeAt(1, 2, 2).getState().equals(CubeState.PLACEHOLDER));
+		assert(board.getCubeAt(3, 2, 2).getState().equals(CubeState.LOCKED));
+		assert(board.getCubeAt(2, 1, 2).getState().equals(CubeState.LOCKED));
+		assert(board.getCubeAt(2, 3, 2).getState().equals(CubeState.LOCKED));
+		assert(board.getCubeAt(2, 2, 1).getState().equals(CubeState.LOCKED));
+		assert(board.getCubeAt(2, 2, 3).getState().equals(CubeState.LOCKED));
+		
+		assert(board.getCubeAt(0, 2, 2).getState().equals(CubeState.REAL));
+		assert(board.getCubeAt(2, 2, 2).getState().equals(CubeState.LOCKED));
+		assert(board.getCubeAt(1, 1, 2).getState().equals(CubeState.LOCKED));
+		assert(board.getCubeAt(1, 3, 2).getState().equals(CubeState.LOCKED));
+		assert(board.getCubeAt(1, 2, 1).getState().equals(CubeState.LOCKED));
+		assert(board.getCubeAt(1, 2, 3).getState().equals(CubeState.LOCKED));
+		
+		assert(board.getCubeAt(0, 1, 2).getState().equals(CubeState.PLACEHOLDER));
+		assert(board.getCubeAt(0, 3, 2).getState().equals(CubeState.PLACEHOLDER));
+		assert(board.getCubeAt(0, 2, 1).getState().equals(CubeState.PLACEHOLDER));
+		assert(board.getCubeAt(0, 2, 3).getState().equals(CubeState.PLACEHOLDER));
+		
+		return board;
+	}
+	
 	
 	
 	////////////////////
 	//BASIC BOARD TEST//
 	////////////////////
 	
-	@Ignore
 	@Test
 	public Board basicBoardTest()
 	{
