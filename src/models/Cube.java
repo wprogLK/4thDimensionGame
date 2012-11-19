@@ -12,9 +12,21 @@ import org.lwjgl.opengl.GL11;
 public class Cube
 {
 	//Cordinates are the upperleftBehindCorner!
-	private int xCoordinate;
-	private int yCoordinate;
-	private int zCoordinate;
+	private int x;
+	private int y;
+	private int z;
+	
+	/*
+	 * the coordinate system is:
+	 *    y
+	 *    | 
+	 * 	  |
+	 * 	  |
+	 *    /---------x
+	 *   /
+	 *  /
+	 * z
+	 */
 	
 	//For rendering
 	private int height = 10;
@@ -49,25 +61,25 @@ public class Cube
 	 */
 	public Cube(int xCoordiante, int yCoordinate, int zCoordinate, CubeState state)
 	{
-		this.xCoordinate = xCoordiante;
-		this.yCoordinate = yCoordinate;
-		this.zCoordinate = zCoordinate;
+		this.x = xCoordiante;
+		this.y = yCoordinate;
+		this.z = zCoordinate;
 		
 		this.state = state;
 	}
 	
 	public Cube(int xCoordiante, int yCoordinate, int zCoordinate)
 	{
-		this.xCoordinate = xCoordiante;
-		this.yCoordinate = yCoordinate;
-		this.zCoordinate = zCoordinate;
+		this.x = xCoordiante;
+		this.y = yCoordinate;
+		this.z = zCoordinate;
 		
 		this.state = CubeState.REAL;
 	}
 	
 	public int getCubeIndex()
 	{
-		return this.yCoordinate; //it's y coordinate because the lane size is the yCoordinate (-> see board.class)
+		return this.y; //it's y coordinate because the lane size is the yCoordinate (-> see board.class)
 	}
 	
 	public CubeState getState()
@@ -82,7 +94,7 @@ public class Cube
 
 	public int[] getCoordinates()
 	{
-		int[] coordinates = {this.xCoordinate,this.yCoordinate,this.zCoordinate};
+		int[] coordinates = {this.x,this.y,this.z};
 		
 		return coordinates;
 		
@@ -91,7 +103,7 @@ public class Cube
 	@Override
 	public String toString()
 	{
-		return "CUBE: State: " + this.state + " at [ " + this.xCoordinate + " | " + this.yCoordinate + " | " + this.zCoordinate + " ]";
+		return "CUBE: State: " + this.state + " at [ " + this.x + " | " + this.y + " | " + this.z + " ]";
 	}
 
 	public void update(int delta)
@@ -108,26 +120,118 @@ public class Cube
 	{
 		System.out.println("RENDERING CUBE...");
 	
-		GL11.glRotatef(rot, 0.0f, 1.0f, 0.0f);
+		GL11.glRotatef(rot, 0.0f, 0.0f, 1.0f);
 		
-		//Front:
+		this.addFrontSide();
+		this.addBackSide();
+		this.addTopSide();
+		this.addDownSide();
+		this.addRightSide();
+		this.addLeftSide();
+		
+	}
+	
+	private void addFrontSide()
+	{
 		GL11.glBegin(GL11.GL_QUADS);
-			GL11.glVertex3d(this.xCoordinate+this.deepth, this.yCoordinate, this.zCoordinate); //top left corner
-			GL11.glVertex3d(this.xCoordinate+this.deepth, this.yCoordinate, this.zCoordinate-this.height); //lower left corner
-			GL11.glVertex3d(this.xCoordinate+this.deepth, this.yCoordinate+this.width, this.zCoordinate-this.height); //lower right corner
-			GL11.glVertex3d(this.xCoordinate+this.deepth, this.yCoordinate+this.width, this.zCoordinate); //top right corner
-			
-		GL11.glEnd();
-
-		//Right:
-		GL11.glBegin(GL11.GL_QUADS);
-			GL11.glVertex3d(this.xCoordinate+this.deepth, this.yCoordinate+this.width, this.zCoordinate); //top right corner front
-		GL11.glVertex3d(this.xCoordinate, this.yCoordinate+this.width, this.zCoordinate); //top right corner back
-		GL11.glVertex3d(this.xCoordinate, this.yCoordinate+this.width, this.zCoordinate-this.height); //lower right corner back
-			GL11.glVertex3d(this.xCoordinate+this.deepth, this.yCoordinate+this.width, this.zCoordinate-this.height); //lower right corner front
-
+			this.addCornerLeftFrontTop(); //H
+			this.addCornerLeftFrontDown(); //G
+			this.addCornerRightFrontDown(); //F
+			this.addCornerRightFrontTop(); //E
 		GL11.glEnd();
 	}
+	
+	private void addBackSide()
+	{
+		GL11.glBegin(GL11.GL_QUADS);
+			this.addCornerLeftBackTop(); //B
+			 this.addCornerRightBackTop();//C
+			 this.addCornerRightBackDown(); //D
+			this.addCornerLeftBackDown(); //A
+		GL11.glEnd();
+	}
+	
+	private void addTopSide()
+	{
+		GL11.glBegin(GL11.GL_QUADS);
+			this.addCornerLeftBackTop(); //B
+			this.addCornerLeftFrontTop(); //H
+			this.addCornerRightFrontTop(); //E
+			this.addCornerRightBackTop(); //C
+		GL11.glEnd();
+	}
+	
+	private void addDownSide()
+	{
+		GL11.glBegin(GL11.GL_QUADS);
+			this.addCornerRightBackDown(); //D
+			this.addCornerRightFrontDown(); //F
+			this.addCornerLeftFrontDown(); //G
+			this.addCornerLeftBackDown(); //A
+		GL11.glEnd();
+	}
+	
+	private void addRightSide()
+	{
+		GL11.glBegin(GL11.GL_QUADS);
+			this.addCornerRightFrontDown(); //F
+			this.addCornerRightBackDown(); //D
+			this.addCornerRightBackTop(); //C
+			this.addCornerRightFrontTop(); //E
+		GL11.glEnd();
+	}
+	
+	private void addLeftSide()
+	{
+		GL11.glBegin(GL11.GL_QUADS);
+			this.addCornerLeftBackDown(); //A
+			this.addCornerLeftFrontDown(); //G
+			this.addCornerLeftFrontTop(); //H
+			this.addCornerLeftBackTop(); //B
+		GL11.glEnd();
+	}
+	
+	///////////
+	//CORNERS//
+	///////////
+	
+	private void addCornerLeftFrontTop() //H
+	{
+		GL11.glVertex3d(this.x, this.y+this.height, this.z+this.deepth);
+	}
 
-
+	private void addCornerLeftFrontDown() //G
+	{
+		GL11.glVertex3d(this.x, this.y, this.z+this.deepth);
+	}
+	
+	private void addCornerRightFrontDown() //F
+	{
+		GL11.glVertex3d(this.x+this.width, this.y, this.z+this.deepth);
+	}
+	
+	private void addCornerRightFrontTop() //E
+	{
+		GL11.glVertex3d(this.x+this.width, this.y+this.height, this.z+this.deepth);
+	}
+	
+	private void addCornerLeftBackTop() //B
+	{
+		GL11.glVertex3d(this.x, this.y+this.height, this.z);
+	}
+	
+	private void addCornerRightBackTop() //C
+	{
+		GL11.glVertex3d(this.x+this.width, this.y+this.height, this.z);
+	}
+	
+	private void addCornerRightBackDown() //D
+	{
+		GL11.glVertex3d(this.x+this.width, this.y, this.z);
+	}
+	
+	private void addCornerLeftBackDown() //A
+	{
+		GL11.glVertex3d(this.x, this.y, this.z);
+	}
 }
