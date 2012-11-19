@@ -40,11 +40,10 @@ public class Cube
 	 */
 	
 	//For rendering
-	private int height = 10;
-	private int width = 10;
-	private int deepth = 10;
+	private static int height = 10;
+	private static int width = 10;
+	private static int deepth = 10;
 	
-	private float rot = 0;
 	public enum CubeState
 	{
 		LOCKED("L",0.0f,0.0f,0.0f,0.0f),
@@ -115,9 +114,9 @@ public class Cube
 	
 	private void initAbsCoordinates()
 	{
-		this.xCoordinate = this.x*this.width+this.distX*x;
-		this.yCoordinate = this.y*this.height+this.distY*y;
-		this.zCoordinate = this.z*this.deepth+this.distZ*z;
+		this.xCoordinate = this.x*width+this.distX*x;
+		this.yCoordinate = this.y*height+this.distY*y;
+		this.zCoordinate = this.z*deepth+this.distZ*z;
 	}
 	
 	public int getCubeIndex()
@@ -140,7 +139,21 @@ public class Cube
 		int[] coordinates = {this.x,this.y,this.z};
 		
 		return coordinates;
-		
+	}
+
+	public static int getWidth()
+	{
+		return width;
+	}
+	
+	public static int getHeight()
+	{
+		return height;
+	}
+	
+	public static int getDeepth()
+	{
+		return deepth;
 	}
 	
 	@Override
@@ -151,7 +164,7 @@ public class Cube
 
 	public void update(int delta)
 	{
-			rot +=0.05f*delta ; //TODO 
+
 	}
 	
 	//////////
@@ -161,9 +174,7 @@ public class Cube
 	public void render() 
 	{
 		GL11.glPushMatrix(); //Push and Pop important otherwise the cubes aren't sync rotating!
-		
-		GL11.glRotatef(rot, 0.0f, 1.0f, 0.0f);
-		
+	
 		this.setColour();
 		
 		this.addFrontSide();
@@ -179,7 +190,6 @@ public class Cube
 	private void addFrontSide()
 	{
 		GL11.glBegin(GL11.GL_QUADS);
-		this.setColour();
 			this.addCornerLeftFrontTop(); //H
 			this.addCornerLeftFrontDown(); //G
 			this.addCornerRightFrontDown(); //F
@@ -190,7 +200,6 @@ public class Cube
 	private void addBackSide()
 	{
 		GL11.glBegin(GL11.GL_QUADS);
-		this.setColour();
 			this.addCornerLeftBackTop(); //B
 			 this.addCornerRightBackTop();//C
 			 this.addCornerRightBackDown(); //D
@@ -201,7 +210,6 @@ public class Cube
 	private void addTopSide()
 	{
 		GL11.glBegin(GL11.GL_QUADS);
-		this.setColour();
 			this.addCornerLeftBackTop(); //B
 			this.addCornerLeftFrontTop(); //H
 			this.addCornerRightFrontTop(); //E
@@ -212,7 +220,6 @@ public class Cube
 	private void addDownSide()
 	{
 		GL11.glBegin(GL11.GL_QUADS);
-		this.setColour();
 			this.addCornerRightBackDown(); //D
 			this.addCornerRightFrontDown(); //F
 			this.addCornerLeftFrontDown(); //G
@@ -223,7 +230,6 @@ public class Cube
 	private void addRightSide()
 	{
 		GL11.glBegin(GL11.GL_QUADS);
-		this.setColour();
 			this.addCornerRightFrontDown(); //F
 			this.addCornerRightBackDown(); //D
 			this.addCornerRightBackTop(); //C
@@ -234,7 +240,6 @@ public class Cube
 	private void addLeftSide()
 	{
 		GL11.glBegin(GL11.GL_QUADS);
-		this.setColour();
 			this.addCornerLeftBackDown(); //A
 			this.addCornerLeftFrontDown(); //G
 			this.addCornerLeftFrontTop(); //H

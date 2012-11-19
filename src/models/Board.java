@@ -4,6 +4,9 @@
 package models;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+
+import org.lwjgl.opengl.GL11;
 
 import annotations.OnlyForTesting;
 
@@ -16,6 +19,10 @@ import models.Cube.CubeState;
 public class Board 
 {
 	private Cube[][][] board;
+	
+	private int[] center;
+	
+	private float angle = 0;
 	
 	//Constrains for the dimensions of the board
 	private final int maxZ;
@@ -56,6 +63,8 @@ public class Board
 				}
 			}
 		}
+		
+		this.updateCenter();
 	}
 	
 	public Board(ArrayList<Cube> startCubes)
@@ -63,6 +72,73 @@ public class Board
 		this(defaultMaxX,defaultMaxY,defaultMaxZ);
 		
 		this.addBasicCubes(startCubes);
+	}
+	
+	private void updateCenter()
+	{
+		int minX = this.maxX;
+		int maxX = 0;
+		
+		int minY = this.maxY;
+		int maxY = 0;
+		
+		int minZ = this.maxZ;
+		int maxZ = 0;
+		
+		if(this.realCubes.isEmpty())
+		{
+			this.center = new int[3];
+			
+			this.center[0] = 0;
+			this.center[1] = 0;
+			this.center[2] = 0;
+		}
+		else
+		{
+			for(Cube c:this.realCubes)
+			{
+				int[] coordCube = c.getCoordinates();
+				
+				int xCube = coordCube[0];
+				int yCube = coordCube[1];
+				int zCube = coordCube[2];
+				
+				if(xCube<minX)
+				{
+					minX = xCube;
+				}
+				
+				if(xCube>maxX)
+				{
+					maxX = xCube;
+				}
+				
+				if(yCube<minY)
+				{
+					minY = yCube;
+				}
+				
+				if(yCube>maxY)
+				{
+					maxY = yCube;
+				}
+				
+				if(zCube<minZ)
+				{
+					minZ = zCube;
+				}
+				
+				if(zCube>maxZ)
+				{
+					maxZ = zCube;
+				}
+			}
+			
+			this.center = new int[3];
+			this.center[0] = (int) Math.ceil((maxX-minX)/2.0);
+			this.center[1] = (int) Math.ceil((maxY-minY)/2.0);
+			this.center[2] = (int) Math.ceil((maxZ-minZ)/2.0);
+		}
 	}
 	
 	//PRIVATE
@@ -156,6 +232,7 @@ public class Board
 			//TODO throw exception
 		}
 		
+		this.updateCenter();
 	}
 	
 	//PRIVATE
@@ -416,10 +493,15 @@ public class Board
 			System.out.println("ERROR: invalid position! No cube to remove!");
 			//TODO throw exception
 		}
+		
+		this.updateCenter();
 	}
 
 	public void update(int delta) 
 	{
+		this.angle +=0.05f*delta ; //TODO 
+		
+		this.updateCenter();
 //		this.realCubes.get(0).update(delta);
 		this.updateRealCubes(delta);
 		this.updatePlaceholderCubes(delta);
@@ -447,9 +529,17 @@ public class Board
 	
 	public void render()
 	{
+		GL11.glPushMatrix();
+
+		GL11.glTranslatef(this.center[0]*Cube.getWidth(),this.center[1]*Cube.getHeight(), this.center[2]*Cube.getDeepth());
+		GL11.glRotatef(this.angle, 0.0f, 1.0f, 0.0f);
+		GL11.glTranslatef(-this.center[0]*Cube.getWidth(),-this.center[1]*Cube.getHeight(), -this.center[2]*Cube.getDeepth());
+		
 		this.renderRealCubes();
 		this.renderPlaceholderCubes();
 		this.renderBoard();
+		
+		GL11.glPopMatrix();
 	}
 
 	private void renderBoard()

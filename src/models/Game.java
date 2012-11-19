@@ -64,8 +64,11 @@ public class Game
 	private void initTestBoard()
 	{
 		ArrayList<Cube> basicCubes = new ArrayList<Cube>();
-		basicCubes.add(new Cube(2,2,2));
+//		basicCubes.add(new Cube(2,2,2));
 		basicCubes.add(new Cube(1,1,1));
+		basicCubes.add(new Cube(2,1,1));
+		basicCubes.add(new Cube(3,1,1));
+		basicCubes.add(new Cube(4,1,1));
 		this.board = new Board(basicCubes);
 	}
 
@@ -275,12 +278,11 @@ public class Game
 			GL11.glEnable(GL11.GL_ALPHA_TEST);
             GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
 			GL11.glViewport(0,0,this.windowWidth,this.windowHeight); //origin coordinates at (0|0)
-			
+
 			GL11.glMatrixMode(GL11.GL_PROJECTION);
 			GL11.glLoadIdentity(); //Load the standard matrix
 			
 			GLU.gluPerspective(this.viewAngle, this.windowWidth/this.windowHeight, this.nearPlane, this.farPlane);
-			
 			GL11.glMatrixMode(GL11.GL_MODELVIEW);
 		}
 		
@@ -289,7 +291,8 @@ public class Game
 			GL11.glClear(GL11.GL_COLOR_BUFFER_BIT | GL11.GL_DEPTH_BUFFER_BIT);
 			GL11.glColor3f(0.5f, 0.5f, 1.0f);
 			GL11.glLoadIdentity(); //Load the standard matrix
-			GL11.glTranslated(0.0f,-10.0f,-60.0f); //TODO try other values
+//			GL11.glTranslated(0.0f,-10.0f,-60.0f); //TODO try other values
+			GL11.glTranslated(-15.0f,-0.0f,-160.0f); //TODO try other values
 		}
 		
 	}
