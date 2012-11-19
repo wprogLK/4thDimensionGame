@@ -173,7 +173,7 @@ public class Cube
 	
 	public void render() 
 	{
-		GL11.glPushMatrix(); //Push and Pop important otherwise the cubes aren't sync rotating!
+//		GL11.glPushMatrix(); //Push and Pop important otherwise the cubes aren't sync rotating!
 	
 		this.setColour();
 		
@@ -184,7 +184,7 @@ public class Cube
 		this.addRightSide();
 		this.addLeftSide();
 		
-		GL11.glPopMatrix();
+//		GL11.glPopMatrix();
 	}
 	
 	private void addFrontSide()
@@ -259,6 +259,7 @@ public class Cube
 	
 	private void addCornerLeftFrontTop() //H
 	{
+//		System.out.println("X : " + this.xCoordinate + " Y: " + ( this.yCoordinate+this.height) + " Z: " +( this.zCoordinate+this.deepth));
 		GL11.glVertex3d(this.xCoordinate, this.yCoordinate+this.height, this.zCoordinate+this.deepth);
 	}
 

@@ -22,7 +22,9 @@ public class Board
 	
 	private int[] center;
 	
-	private float angle = 0;
+	private float angleX = 0;
+	private float angleY = 0;
+	private float angleStep = 1.75f;
 	
 	//Constrains for the dimensions of the board
 	private final int maxZ;
@@ -499,7 +501,7 @@ public class Board
 
 	public void update(int delta) 
 	{
-		this.angle +=0.05f*delta ; //TODO 
+//		this.angle +=0.05f*delta ; //TODO 
 		
 		this.updateCenter();
 //		this.realCubes.get(0).update(delta);
@@ -522,6 +524,12 @@ public class Board
 			c.update(delta);
 		}
 	}
+	
+	public void addAngle(float angleSignX, float angleSignY)
+	{
+		this.angleX += angleSignX*this.angleStep;
+		this.angleY += angleSignY*this.angleStep;
+	}
 
 	//////////
 	//RENDER//
@@ -530,11 +538,10 @@ public class Board
 	public void render()
 	{
 		GL11.glPushMatrix();
-
 		GL11.glTranslatef(this.center[0]*Cube.getWidth(),this.center[1]*Cube.getHeight(), this.center[2]*Cube.getDeepth());
-		GL11.glRotatef(this.angle, 0.0f, 1.0f, 0.0f);
+		GL11.glRotatef(this.angleY, 0.0f, 1.0f, 0.0f);
+		GL11.glRotatef(this.angleX, 1.0f, 0.0f, 0.0f);
 		GL11.glTranslatef(-this.center[0]*Cube.getWidth(),-this.center[1]*Cube.getHeight(), -this.center[2]*Cube.getDeepth());
-		
 		this.renderRealCubes();
 		this.renderPlaceholderCubes();
 		this.renderBoard();
