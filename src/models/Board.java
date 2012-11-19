@@ -420,8 +420,25 @@ public class Board
 
 	public void update(int delta) 
 	{
-		this.realCubes.get(0).update(delta);
-		
+//		this.realCubes.get(0).update(delta);
+		this.updateRealCubes(delta);
+		this.updatePlaceholderCubes(delta);
+	}
+	
+	private void updateRealCubes(int delta)
+	{
+		for(Cube c : this.realCubes)
+		{
+			c.update(delta);
+		}
+	}
+	
+	private void updatePlaceholderCubes(int delta)
+	{
+		for(Cube c : this.possiblePositions)
+		{
+			c.update(delta);
+		}
 	}
 
 	//////////
@@ -443,17 +460,21 @@ public class Board
 
 	private void renderPlaceholderCubes() 
 	{
-		// TODO Auto-generated method stub
+//		this.possiblePositions.get(0).render();
+		for(Cube c: this.possiblePositions)
+		{
+			c.render();
+		}
 		
 	}
 
 	private void renderRealCubes() 
 	{
-		this.realCubes.get(0).render();
-//		for(Cube c: this.realCubes)
-//		{
-//			c.render();
-//		}
+//		this.realCubes.get(0).render();
+		for(Cube c: this.realCubes)
+		{
+			c.render();
+		}
 		
 	}
 }

@@ -65,7 +65,7 @@ public class Game
 	{
 		ArrayList<Cube> basicCubes = new ArrayList<Cube>();
 		basicCubes.add(new Cube(2,2,2));
-		
+		basicCubes.add(new Cube(1,1,1));
 		this.board = new Board(basicCubes);
 	}
 
@@ -124,13 +124,13 @@ public class Game
 	private void updateGame(int delta)
 	{
 		//TODO
-		System.out.println("Update the game here...");
+//		System.out.println("Update the game here...");
 		this.board.update(delta);
 	}
 
 	private void renderGame()
 	{
-		System.out.println("Render the game here...");
+//		System.out.println("Render the game here...");
 		this.board.render();
 	}
 	///////////////
@@ -204,6 +204,12 @@ public class Game
 			}
 		}
 		
+		/*need to render the scene twice because of the transparency objects!
+		 * render 1) draw the entire scene with depth testing on for all the opaque fragments
+		 * render 2) draw the entire scene again with the depth buffer read only.
+		 *(Source: http://relativity.net.au/gaming/java/Transparency.html)
+		 */
+		
 		private void runGameLoop()
 		{
 			while(!gameOver && !Display.isCloseRequested())
@@ -213,9 +219,22 @@ public class Game
 				updateGame(delta);
 				this.updateFPS();
 				
+				GL11.glDepthMask(true);
 				this.prepareForRendering();
+				
+				//first render
+				GL11.glDisable(GL11.GL_BLEND);
+                GL11.glAlphaFunc(GL11.GL_EQUAL, 1.0f);
+				
 				renderGame();
 				
+				//second render
+				GL11.glEnable(GL11.GL_BLEND);
+                GL11.glDepthMask(false);
+                GL11.glAlphaFunc(GL11.GL_LESS, 1.0f);
+				
+                renderGame();
+                
 				Display.update();
 				Display.sync(60);
 			}
@@ -253,6 +272,8 @@ public class Game
 		private void setupGL()
 		{
 			GL11.glEnable(GL11.GL_DEPTH_TEST); //GL forbid to "overpaint" given pixels.
+			GL11.glEnable(GL11.GL_ALPHA_TEST);
+            GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
 			GL11.glViewport(0,0,this.windowWidth,this.windowHeight); //origin coordinates at (0|0)
 			
 			GL11.glMatrixMode(GL11.GL_PROJECTION);
@@ -261,11 +282,6 @@ public class Game
 			GLU.gluPerspective(this.viewAngle, this.windowWidth/this.windowHeight, this.nearPlane, this.farPlane);
 			
 			GL11.glMatrixMode(GL11.GL_MODELVIEW);
-			
-//			GL11.glMatrixMode(GL11.GL_PROJECTION);
-//			GL11.glLoadIdentity();
-//			GL11.glOrtho(0, this.windowWidth, 0, this.windowHeight, 1, -1); 
-//			GL11.glMatrixMode(GL11.GL_MODELVIEW);
 		}
 		
 		private void prepareForRendering()
