@@ -9,6 +9,7 @@ import java.util.LinkedList;
 import java.util.ListIterator;
 import java.util.Queue;
 
+import models.Cube.CubeState;
 import models.MouseState.MouseButtonState;
 
 import org.lwjgl.LWJGLException;
@@ -411,6 +412,7 @@ public class Game
                 
                 switch(key) 
                 {
+                		//ROTATE BOARD:
                         case Keyboard.KEY_UP:
                         {
                         	board.addAngle(-1,0);
@@ -429,6 +431,37 @@ public class Game
                         case Keyboard.KEY_RIGHT:
                         {
                         	board.addAngle(0,+1);
+                        	break;
+                        }
+                        //CHANGE SELECTED CUBE: (at the moment only placeholder cubes!)
+                        case Keyboard.KEY_A:
+                        {
+                        	board.changeSelectedCube(-1, 0, 0, CubeState.PLACEHOLDER);
+                        	break;
+                        }
+                        case Keyboard.KEY_D:
+                        {
+                        	board.changeSelectedCube(1, 0, 0, CubeState.PLACEHOLDER);
+                        	break;
+                        }
+                        case Keyboard.KEY_W:
+                        {
+                        	board.changeSelectedCube(0, 1, 0, CubeState.PLACEHOLDER);
+                        	break;
+                        }
+                        case Keyboard.KEY_S:
+                        {
+                        	board.changeSelectedCube(0, -1, 0, CubeState.PLACEHOLDER);
+                        	break;
+                        }
+                        case Keyboard.KEY_Q:
+                        {
+                        	board.changeSelectedCube(0, 0, 1, CubeState.PLACEHOLDER);
+                        	break;
+                        }
+                        case Keyboard.KEY_Y:
+                        {
+                        	board.changeSelectedCube(0, 0, -1, CubeState.PLACEHOLDER);
                         	break;
                         }
                 }   

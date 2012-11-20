@@ -37,6 +37,9 @@ public class Board
 	
 	private ArrayList<Cube> possiblePositions;
 	private ArrayList<Cube> realCubes;
+	
+	private Cube currentSelectedCube;
+	
 	/*
 	 * This constructor shouldn't used in the final game!
 	 */
@@ -67,6 +70,7 @@ public class Board
 		}
 		
 		this.updateCenter();
+		this.resetCurrentSelectedCube();
 	}
 	
 	public Board(ArrayList<Cube> startCubes)
@@ -74,6 +78,29 @@ public class Board
 		this(defaultMaxX,defaultMaxY,defaultMaxZ);
 		
 		this.addBasicCubes(startCubes);
+		this.resetCurrentSelectedCube();
+	}
+	
+	private void resetCurrentSelectedCube()
+	{
+		if(!this.possiblePositions.isEmpty())
+		{
+			this.setSelectedCube(this.possiblePositions.get(0));
+		}
+	}
+	
+	private void setSelectedCube(Cube newSelectedCube)
+	{
+		if(this.currentSelectedCube != null)
+		{
+			this.currentSelectedCube.setSelected(false);
+		}
+		
+		if(newSelectedCube != null)
+		{
+			newSelectedCube.setSelected(true);
+			this.currentSelectedCube = newSelectedCube;
+		}
 	}
 	
 	private void updateCenter()
@@ -525,12 +552,54 @@ public class Board
 		}
 	}
 	
+	
+	
+	
+	//////////////
+	//CONTROLLER//
+	//////////////
+	
 	public void addAngle(float angleSignX, float angleSignY)
 	{
 		this.angleX += angleSignX*this.angleStep;
 		this.angleY += angleSignY*this.angleStep;
 	}
-
+	
+	public void changeSelectedCube(int dx,int dy, int dz, CubeState stateOfSelectedCube)
+	{
+		if(this.currentSelectedCube != null)
+		{
+			int[] coordinatesCurrentSelectedCube = this.currentSelectedCube.getCoordinates();
+			
+			int currentX = coordinatesCurrentSelectedCube[0];
+			int currentY = coordinatesCurrentSelectedCube[1];
+			int currentZ = coordinatesCurrentSelectedCube[2];
+			
+			int newX = dx + currentX;
+			int newY = dy + currentY;
+			int newZ = dz + currentZ;
+			
+			if(newX>=0 && newX<=this.maxX && newY>=0 && newY<=this.maxY && newZ>=0 && newZ<=this.maxZ)
+			{
+				Cube newCube = this.board[newX][newY][newZ];
+				
+				if(newCube.getState()!=CubeState.LOCKED)
+				{
+					this.setSelectedCube(newCube);
+				}
+				else
+				{
+					System.out.println("Error: The new selected cube is locked!"); //TODO: try the next cube
+				}
+			}
+			else
+			{
+				System.out.println("Error: New selected cube will be out of the boarder!"); //TODO
+			}
+		}
+		
+	}
+	
 	//////////
 	//RENDER//
 	//////////

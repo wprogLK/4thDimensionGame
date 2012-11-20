@@ -13,6 +13,8 @@ import org.lwjgl.opengl.GL11;
  */
 public class Cube
 {
+	private boolean isSelected;
+	
 	//rel. cordinates (index in board)
 	private int x;
 	private int y;
@@ -99,6 +101,7 @@ public class Cube
 		this.initAbsCoordinates();
 		
 		this.state = state;
+		this.isSelected = false;
 	}
 	
 	public Cube(int xCoordiante, int yCoordinate, int zCoordinate)
@@ -110,6 +113,7 @@ public class Cube
 		this.initAbsCoordinates();
 		
 		this.state = CubeState.REAL;
+		this.isSelected = false;
 	}
 	
 	private void initAbsCoordinates()
@@ -156,6 +160,16 @@ public class Cube
 		return deepth;
 	}
 	
+	public boolean isSelected()
+	{
+		return this.isSelected;
+	}
+	
+	public void setSelected(boolean value)
+	{
+		this.isSelected = value;
+	}
+	
 	@Override
 	public String toString()
 	{
@@ -170,6 +184,8 @@ public class Cube
 	//////////
 	//RENDER//
 	//////////
+	
+	//TODO: don't render the side of a placeholdercube where the neighbour is a realcube! (doesn't look nice)
 	
 	public void render() 
 	{
@@ -249,8 +265,15 @@ public class Cube
 	
 	private void setColour()
 	{
-		float[] colour = this.state.getColour();
-		GL11.glColor4f(colour[0], colour[1], colour[2], colour[3]);
+		if(!this.isSelected)
+		{
+			float[] colour = this.state.getColour();
+			GL11.glColor4f(colour[0], colour[1], colour[2], colour[3]);
+		}
+		else
+		{
+			GL11.glColor4f(1.0f, 0.0f, 0.0f, 1.0f); //Color for selected cube
+		}
 	}
 	
 	///////////
