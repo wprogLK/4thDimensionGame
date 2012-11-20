@@ -410,61 +410,65 @@ public class Game
 			{
                 int key = Keyboard.getEventKey();
                 
-                switch(key) 
+                if (Keyboard.getEventKeyState()) 
                 {
-                		//ROTATE BOARD:
-                        case Keyboard.KEY_UP:
-                        {
-                        	board.addAngle(-1,0);
-                        	break;
-                        }
-                        case Keyboard.KEY_DOWN:
-                        {
-                        	board.addAngle(+1,0);
-                        	break;
-                        } 
-                        case Keyboard.KEY_LEFT:
-                        {
-                        	board.addAngle(0,-1);
-                        	break;
-                        }
-                        case Keyboard.KEY_RIGHT:
-                        {
-                        	board.addAngle(0,+1);
-                        	break;
-                        }
-                        //CHANGE SELECTED CUBE: (at the moment only placeholder cubes!)
-                        case Keyboard.KEY_A:
-                        {
-                        	board.changeSelectedCube(-1, 0, 0, CubeState.PLACEHOLDER);
-                        	break;
-                        }
-                        case Keyboard.KEY_D:
-                        {
-                        	board.changeSelectedCube(1, 0, 0, CubeState.PLACEHOLDER);
-                        	break;
-                        }
-                        case Keyboard.KEY_W:
-                        {
-                        	board.changeSelectedCube(0, 1, 0, CubeState.PLACEHOLDER);
-                        	break;
-                        }
-                        case Keyboard.KEY_S:
-                        {
-                        	board.changeSelectedCube(0, -1, 0, CubeState.PLACEHOLDER);
-                        	break;
-                        }
-                        case Keyboard.KEY_Q:
-                        {
-                        	board.changeSelectedCube(0, 0, 1, CubeState.PLACEHOLDER);
-                        	break;
-                        }
-                        case Keyboard.KEY_Y:
-                        {
-                        	board.changeSelectedCube(0, 0, -1, CubeState.PLACEHOLDER);
-                        	break;
-                        }
-                }   
+                	 switch(key) 
+                     {
+                     		//ROTATE BOARD:
+                             case Keyboard.KEY_UP:
+                             {
+                             	board.addAngle(-1,0);
+                             	break;
+                             }
+                             case Keyboard.KEY_DOWN:
+                             {
+                             	board.addAngle(+1,0);
+                             	break;
+                             } 
+                             case Keyboard.KEY_LEFT:
+                             {
+                             	board.addAngle(0,-1);
+                             	break;
+                             }
+                             case Keyboard.KEY_RIGHT:
+                             {
+                             	board.addAngle(0,+1);
+                             	break;
+                             }
+                             //CHANGE SELECTED CUBE: (at the moment only placeholder cubes!)
+                             case Keyboard.KEY_A:
+                             {
+                             	board.changeSelectedCube(-1, 0, 0, CubeState.PLACEHOLDER);
+                             	break;
+                             }
+                             case Keyboard.KEY_D:
+                             {
+                             	board.changeSelectedCube(1, 0, 0, CubeState.PLACEHOLDER);
+                             	break;
+                             }
+                             case Keyboard.KEY_W:
+                             {
+                             	board.changeSelectedCube(0, 1, 0, CubeState.PLACEHOLDER);
+                             	break;
+                             }
+                             case Keyboard.KEY_S:
+                             {
+                             	board.changeSelectedCube(0, -1, 0, CubeState.PLACEHOLDER);
+                             	break;
+                             }
+                             case Keyboard.KEY_Q:
+                             {
+                             	board.changeSelectedCube(0, 0, 1, CubeState.PLACEHOLDER);
+                             	break;
+                             }
+                             case Keyboard.KEY_Y:
+                             {
+                             	board.changeSelectedCube(0, 0, -1, CubeState.PLACEHOLDER);
+                             	break;
+                             }
+                     }   
+                }
+               
 			}
 		}
 	}
