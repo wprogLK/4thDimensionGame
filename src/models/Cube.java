@@ -15,7 +15,7 @@ public class Cube
 {
 	private boolean isSelected;
 	
-	//rel. cordinates (index in board)
+	//rel. cordinates (index in board) (board coordinates)
 	private int x;
 	private int y;
 	private int z;
@@ -144,6 +144,22 @@ public class Cube
 		
 		return coordinates;
 	}
+	
+	public int getBoardCoordinateX()
+	{
+		return this.x;
+	}
+	
+	public int getBoardCoordinateY()
+	{
+		return this.y;
+	}
+	
+	public int getBoardCoordinateZ()
+	{
+		return this.z;
+	}
+	
 
 	public static int getWidth()
 	{

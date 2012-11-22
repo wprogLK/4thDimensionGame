@@ -245,14 +245,14 @@ public class Game
 				//first render
 				GL11.glDisable(GL11.GL_BLEND);
                 GL11.glAlphaFunc(GL11.GL_EQUAL, 1.0f);
-				
+                
 				renderGame();
 				
 				//second render
 				GL11.glEnable(GL11.GL_BLEND);
                 GL11.glDepthMask(false);
                 GL11.glAlphaFunc(GL11.GL_LESS, 1.0f);
-				
+
                 renderGame();
                 
 				Display.update();
@@ -292,7 +292,7 @@ public class Game
 		private void setupGL()
 		{
 			GL11.glEnable(GL11.GL_DEPTH_TEST); //GL forbid to "overpaint" given pixels.
-
+			
 			GL11.glEnable(GL11.GL_ALPHA_TEST);
             GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
 			GL11.glViewport(0,0,this.windowWidth,this.windowHeight); //origin coordinates at (0|0)

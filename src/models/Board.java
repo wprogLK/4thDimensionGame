@@ -551,10 +551,7 @@ public class Board
 			c.update(delta);
 		}
 	}
-	
-	
-	
-	
+
 	//////////////
 	//CONTROLLER//
 	//////////////
@@ -579,25 +576,46 @@ public class Board
 			int newY = dy + currentY;
 			int newZ = dz + currentZ;
 			
-			if(newX>=0 && newX<=this.maxX && newY>=0 && newY<=this.maxY && newZ>=0 && newZ<=this.maxZ)
+			///NEW
+			Cube newCube = null;
+			
+			while(newCube==null || newCube.getState()==CubeState.LOCKED)
 			{
-				Cube newCube = this.board[newX][newY][newZ];
-				
-				if(newCube.getState()!=CubeState.LOCKED)
+				if(newX<0)
 				{
-					this.setSelectedCube(newCube);
+					newX=this.maxX-1;
 				}
-				else
+				else if(newX>this.maxX-1)
 				{
-					System.out.println("Error: The new selected cube is locked!"); //TODO: try the next cube
+					newX=0;
 				}
+
+				if(newY<0)
+				{
+					newY=this.maxY-1;
+				}
+				else if(newY>this.maxY-1)
+				{
+					newY=0;
+				}
+
+				if(newZ<0)
+				{
+					newZ=this.maxZ-1;
+				}
+				else if(newZ>this.maxZ-1)
+				{
+					newZ=0;
+				}
+
+				newCube = this.board[newX][newY][newZ];
+
+				newX +=dx;
+				newY +=dy;
+				newZ +=dz;
 			}
-			else
-			{
-				System.out.println("Error: New selected cube will be out of the boarder!"); //TODO
-			}
+			this.setSelectedCube(newCube);
 		}
-		
 	}
 	
 	//////////
