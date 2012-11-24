@@ -3,9 +3,16 @@
  */
 package models;
 
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collection;
+import java.util.Collections;
+
+import javax.swing.event.ListSelectionEvent;
 
 import org.lwjgl.opengl.GL11;
+
+import com.sun.xml.internal.bind.v2.schemagen.xmlschema.List;
 
 /**
  * @author Lukas
@@ -28,6 +35,15 @@ public class Cube
 	private int distX = 0;
 	private int distY = 0;
 	private int distZ = 0;
+	
+	private CubeFace faceUp; 
+	private CubeFace faceDown; 
+	private CubeFace faceLeft; 
+	private CubeFace faceRight; 
+	private CubeFace faceFront; 
+	private CubeFace faceBack; 
+	
+	private ArrayList<CubeVertex> cubeVertices;
 	
 	/*
 	 * the coordinate system is:
@@ -99,6 +115,7 @@ public class Cube
 		this.z = zCoordinate;
 		
 		this.initAbsCoordinates();
+		this.initFaces();
 		
 		this.state = state;
 		this.isSelected = false;
@@ -111,6 +128,7 @@ public class Cube
 		this.z = zCoordinate;
 		
 		this.initAbsCoordinates();
+		this.initFaces();
 		
 		this.state = CubeState.REAL;
 		this.isSelected = false;
@@ -121,6 +139,168 @@ public class Cube
 		this.xCoordinate = this.x*width+this.distX*x;
 		this.yCoordinate = this.y*height+this.distY*y;
 		this.zCoordinate = this.z*deepth+this.distZ*z;
+	}
+	
+	private void initFaces()
+	{
+		this.cubeVertices = new ArrayList<CubeVertex>();
+		
+		this.cubeVertices.add(new CubeVertex(this.xCoordinate, this.yCoordinate, this.zCoordinate, "LeftBackDown - A"));
+		this.cubeVertices.add(new CubeVertex(this.xCoordinate, this.yCoordinate+this.height, this.zCoordinate, "LeftBackTop - B"));
+		this.cubeVertices.add(new CubeVertex(this.xCoordinate+this.width, this.yCoordinate+this.height, this.zCoordinate, "RightBackTop - C"));
+		this.cubeVertices.add(new CubeVertex(this.xCoordinate+this.width, this.yCoordinate, this.zCoordinate, "RightBackDown - D"));
+		this.cubeVertices.add(new CubeVertex(this.xCoordinate+this.width, this.yCoordinate+this.height, this.zCoordinate+this.deepth, "RightFrontTop - E"));
+		this.cubeVertices.add(new CubeVertex(this.xCoordinate+this.width, this.yCoordinate, this.zCoordinate+this.deepth, "RightFrontDown - F"));
+		this.cubeVertices.add(new CubeVertex(this.xCoordinate, this.yCoordinate, this.zCoordinate+this.deepth, "LeftFrontDown - G"));
+		this.cubeVertices.add(new CubeVertex(this.xCoordinate, this.yCoordinate+this.height, this.zCoordinate+this.deepth, "LeftFrontTop - H"));
+	
+		
+		ArrayList<CubeVertex> tmpVert = new ArrayList<CubeVertex>();
+		
+		this.faceBack = new CubeFace(FaceDirection.BACK);
+		
+		tmpVert.add(this.cubeVertices.get(1));
+		tmpVert.add(this.cubeVertices.get(2));
+		tmpVert.add(this.cubeVertices.get(3));
+		tmpVert.add(this.cubeVertices.get(0));
+		this.faceBack.setVertices(tmpVert);
+		tmpVert.clear();
+		
+		
+		this.faceFront = new CubeFace(FaceDirection.FRONT);
+		
+		tmpVert.add(this.cubeVertices.get(7));
+		tmpVert.add(this.cubeVertices.get(6));
+		tmpVert.add(this.cubeVertices.get(5));
+		tmpVert.add(this.cubeVertices.get(4));
+		this.faceFront.setVertices(tmpVert);
+		tmpVert.clear();
+		
+		
+		this.faceLeft = new CubeFace(FaceDirection.LEFT);
+		
+		tmpVert.add(this.cubeVertices.get(0));
+		tmpVert.add(this.cubeVertices.get(6));
+		tmpVert.add(this.cubeVertices.get(7));
+		tmpVert.add(this.cubeVertices.get(1));
+		this.faceLeft.setVertices(tmpVert);
+		tmpVert.clear();
+		
+		
+		this.faceRight = new CubeFace(FaceDirection.RIGHT);
+		
+		tmpVert.add(this.cubeVertices.get(5));
+		tmpVert.add(this.cubeVertices.get(3));
+		tmpVert.add(this.cubeVertices.get(2));
+		tmpVert.add(this.cubeVertices.get(4));
+		this.faceRight.setVertices(tmpVert);
+		tmpVert.clear();
+		
+		
+		this.faceUp = new CubeFace(FaceDirection.UP);
+		
+		tmpVert.add(this.cubeVertices.get(1));
+		tmpVert.add(this.cubeVertices.get(7));
+		tmpVert.add(this.cubeVertices.get(4));
+		tmpVert.add(this.cubeVertices.get(2));
+		this.faceUp.setVertices(tmpVert);
+		tmpVert.clear();
+		
+		
+		this.faceDown = new CubeFace(FaceDirection.DOWN);
+		
+		tmpVert.add(this.cubeVertices.get(3));
+		tmpVert.add(this.cubeVertices.get(5));
+		tmpVert.add(this.cubeVertices.get(6));
+		tmpVert.add(this.cubeVertices.get(0));
+		this.faceDown.setVertices(tmpVert);
+		tmpVert.clear();
+	}
+	
+	public void addPlayer(Player player, FaceDirection direction)
+	{
+		switch(direction)
+		{
+			case UP:
+			{
+				this.faceUp.addPlayer(player);
+				
+				break;
+			}
+			case DOWN:
+			{
+				this.faceDown.addPlayer(player);
+				
+				break;
+			}
+			case LEFT:
+			{
+				this.faceLeft.addPlayer(player);
+				
+				break;
+			}
+			case RIGHT:
+			{
+				this.faceRight.addPlayer(player);
+				
+				break;
+			}
+			case FRONT:
+			{
+				this.faceFront.addPlayer(player);
+				
+				break;
+			}
+			case BACK:
+			{
+				this.faceBack.addPlayer(player);
+				
+				break;
+			}
+		}
+	}
+	
+	public void removePlayer(Player player, FaceDirection direction)
+	{
+		switch(direction)
+		{
+			case UP:
+			{
+				this.faceUp.removePlayer(player);
+				
+				break;
+			}
+			case DOWN:
+			{
+				this.faceDown.removePlayer(player);
+				
+				break;
+			}
+			case LEFT:
+			{
+				this.faceLeft.removePlayer(player);
+				
+				break;
+			}
+			case RIGHT:
+			{
+				this.faceRight.removePlayer(player);
+				
+				break;
+			}
+			case FRONT:
+			{
+				this.faceFront.removePlayer(player);
+				
+				break;
+			}
+			case BACK:
+			{
+				this.faceBack.removePlayer(player);
+				
+				break;
+			}
+		}
 	}
 	
 	public int getCubeIndex()
@@ -209,74 +389,15 @@ public class Cube
 	
 		this.setColour();
 		
-		this.addFrontSide();
-		this.addBackSide();
-		this.addTopSide();
-		this.addDownSide();
-		this.addRightSide();
-		this.addLeftSide();
-		
 //		GL11.glPopMatrix();
-	}
-	
-	private void addFrontSide()
-	{
-		GL11.glBegin(GL11.GL_QUADS);
-			this.addCornerLeftFrontTop(); //H
-			this.addCornerLeftFrontDown(); //G
-			this.addCornerRightFrontDown(); //F
-			this.addCornerRightFrontTop(); //E
-		GL11.glEnd();
-	}
-	
-	private void addBackSide()
-	{
-		GL11.glBegin(GL11.GL_QUADS);
-			this.addCornerLeftBackTop(); //B
-			 this.addCornerRightBackTop();//C
-			 this.addCornerRightBackDown(); //D
-			this.addCornerLeftBackDown(); //A
-		GL11.glEnd();
-	}
-	
-	private void addTopSide()
-	{
-		GL11.glBegin(GL11.GL_QUADS);
-			this.addCornerLeftBackTop(); //B
-			this.addCornerLeftFrontTop(); //H
-			this.addCornerRightFrontTop(); //E
-			this.addCornerRightBackTop(); //C
-		GL11.glEnd();
-	}
-	
-	private void addDownSide()
-	{
-		GL11.glBegin(GL11.GL_QUADS);
-			this.addCornerRightBackDown(); //D
-			this.addCornerRightFrontDown(); //F
-			this.addCornerLeftFrontDown(); //G
-			this.addCornerLeftBackDown(); //A
-		GL11.glEnd();
-	}
-	
-	private void addRightSide()
-	{
-		GL11.glBegin(GL11.GL_QUADS);
-			this.addCornerRightFrontDown(); //F
-			this.addCornerRightBackDown(); //D
-			this.addCornerRightBackTop(); //C
-			this.addCornerRightFrontTop(); //E
-		GL11.glEnd();
-	}
-	
-	private void addLeftSide()
-	{
-		GL11.glBegin(GL11.GL_QUADS);
-			this.addCornerLeftBackDown(); //A
-			this.addCornerLeftFrontDown(); //G
-			this.addCornerLeftFrontTop(); //H
-			this.addCornerLeftBackTop(); //B
-		GL11.glEnd();
+		
+		this.faceBack.render();
+		this.faceFront.render();
+		this.faceDown.render();
+		this.faceUp.render();
+		this.faceRight.render();
+		this.faceLeft.render();
+		
 	}
 	
 	private void setColour()
@@ -291,49 +412,142 @@ public class Cube
 			GL11.glColor4f(1.0f, 0.0f, 0.0f, 1.0f); //Color for selected cube
 		}
 	}
+		
+	//////////////
+	//FACE CLASS//
+	//////////////
 	
-	///////////
-	//CORNERS//
-	///////////
-	
-	private void addCornerLeftFrontTop() //H
+	private class CubeFace
 	{
-//		System.out.println("X : " + this.xCoordinate + " Y: " + ( this.yCoordinate+this.height) + " Z: " +( this.zCoordinate+this.deepth));
-		GL11.glVertex3d(this.xCoordinate, this.yCoordinate+this.height, this.zCoordinate+this.deepth);
+		private ArrayList<Player> playersOnFace;
+		
+		private final int DefaultMaxCapacity = 4;
+		private int maxCapacity; 
+		
+		private FaceDirection direction;
+		
+		private CubeVertex[] vertices;
+		
+		public CubeFace(FaceDirection direction, int maxCapacity)
+		{
+			this.direction = direction;
+			this.maxCapacity = maxCapacity;
+			
+			this.playersOnFace = new ArrayList<Player>();
+			this.vertices = new CubeVertex[4];
+		}
+		
+		public CubeFace(FaceDirection direction)
+		{
+			this.direction = direction;
+			this.maxCapacity = this.DefaultMaxCapacity;
+			
+			this.playersOnFace = new ArrayList<Player>();
+			this.vertices = new CubeVertex[4];
+		}
+		
+		public void setVertices(ArrayList<CubeVertex> vertices)
+		{
+			vertices.toArray(this.vertices);
+		}
+		
+		@Override
+		public String toString()
+		{
+			return this.direction.name();
+		}
+		
+		public boolean isFull()
+		{
+			return playersOnFace.size()>=this.maxCapacity;
+		}
+		
+		public boolean isEmtpy()
+		{
+			return this.playersOnFace.isEmpty();
+		}
+		
+		public int getNumberOfPlayers()
+		{
+			return this.playersOnFace.size();
+		}
+		
+		public void update()
+		{
+			//TODO
+		}
+		
+		public void addPlayer(Player player)
+		{
+			if(!this.playersOnFace.contains(player))
+			{
+				this.playersOnFace.add(player);
+				
+				//TODO update (check event? is face full? ... etc)
+			}
+		}
+		
+		public void removePlayer(Player player)
+		{
+			if(this.playersOnFace.contains(player))
+			{
+				this.playersOnFace.remove(player);
+			}
+		}
+		
+		public void render()
+		{
+			//TODO render face & player
+			GL11.glBegin(GL11.GL_QUADS);
+				for(CubeVertex vertex:this.vertices)
+				{
+					vertex.render();
+				}
+			GL11.glEnd();
+			
+			
+			for(int i = 0; i<this.playersOnFace.size();i++)
+			{
+				Player player = this.playersOnFace.get(i);
+				
+//				GL11.glPushMatrix();
+//					player.render(); //TODO
+//				GL11.glPopMatrix();
+			}
+		}
+		
+		public FaceDirection getFaceDirection()
+		{
+			return this.direction;
+		}
 	}
-
-	private void addCornerLeftFrontDown() //G
-	{
-		GL11.glVertex3d(this.xCoordinate, this.yCoordinate, this.zCoordinate+this.deepth);
-	}
 	
-	private void addCornerRightFrontDown() //F
+	private class CubeVertex
 	{
-		GL11.glVertex3d(this.xCoordinate+this.width, this.yCoordinate, this.zCoordinate+this.deepth);
-	}
-	
-	private void addCornerRightFrontTop() //E
-	{
-		GL11.glVertex3d(this.xCoordinate+this.width, this.yCoordinate+this.height, this.zCoordinate+this.deepth);
-	}
-	
-	private void addCornerLeftBackTop() //B
-	{
-		GL11.glVertex3d(this.xCoordinate, this.yCoordinate+this.height, this.zCoordinate);
-	}
-	
-	private void addCornerRightBackTop() //C
-	{
-		GL11.glVertex3d(this.xCoordinate+this.width, this.yCoordinate+this.height, this.zCoordinate);
-	}
-	
-	private void addCornerRightBackDown() //D
-	{
-		GL11.glVertex3d(this.xCoordinate+this.width, this.yCoordinate, this.zCoordinate);
-	}
-	
-	private void addCornerLeftBackDown() //A
-	{
-		GL11.glVertex3d(this.xCoordinate, this.yCoordinate, this.zCoordinate);
+		private int x;
+		private int y;
+		private int z;
+		
+		private String name;
+		
+		public CubeVertex(int x, int y, int z, String name)
+		{
+			this.x = x;
+			this.y = y;
+			this.z = z;
+			
+			this.name = name;
+		}
+		
+		public void render()
+		{
+			GL11.glVertex3f(this.x, this.y, this.z);
+		}
+		
+		@Override
+		public String toString()
+		{
+			return this.name;
+		}
 	}
 }

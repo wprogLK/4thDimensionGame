@@ -220,13 +220,13 @@ public class Board
 			else
 			{
 				//TODO throw exception
-				System.out.println("--------------------not a possible position!-----------------------");
+				System.out.println("ERROR--------------------not a possible position!-----------------------");
 			}
 		}
 		else
 		{
 			//TODO throw exception
-			System.out.println("out of range");
+			System.out.println("ERROR: out of range");
 		}
 	
 	}
@@ -246,7 +246,7 @@ public class Board
 				this.possiblePositions.remove(oldCube);
 			}
 			
-			System.out.println("ADD CUBE " + cube);
+//			System.out.println("ADD CUBE " + cube);
 			
 			this.board[x][y][z] = cube;
 			 
@@ -257,7 +257,7 @@ public class Board
 		}
 		else
 		{
-			System.out.println("NOT POSSIBLE TO ADD CUBE " + cube);
+			System.out.println("ERROR: NOT POSSIBLE TO ADD CUBE " + cube);
 			//TODO throw exception
 		}
 		
@@ -267,20 +267,19 @@ public class Board
 	//PRIVATE
 	public void updateNeighbours(Cube cube)
 	{
-		System.out.println("Update neighbours of cube " + cube);
+//		System.out.println("Update neighbours of cube " + cube);
 		int[] pos = cube.getCoordinates();
 		
 		ArrayList<Cube>neighbours = this.getNeighboursCube(pos);
 		for(Cube neighbour:neighbours)
 		{
-			
 			this.updateCube(neighbour);
 		}
 	}
 	
 	private void updateCube(Cube cube)
 	{
-		System.out.println("Update cube " + cube);
+//		System.out.println("Update cube " + cube);
 		
 			if(!this.realCubes.contains(cube))
 			{
@@ -304,22 +303,22 @@ public class Board
 				if(realNeighbourFound)
 				{
 					cube.setState(CubeState.PLACEHOLDER);
-					System.out.println("cube is placeholder now");
+//					System.out.println("cube is placeholder now");
 					
 					if(!this.possiblePositions.contains(cube))
 					{
-						System.out.println("add cube to placeholders");
+//						System.out.println("add cube to placeholders");
 						this.possiblePositions.add(cube);
 					}
 				}
 				else
 				{
 					cube.setState(CubeState.LOCKED);
-					System.out.println("cube is locked now");
+//					System.out.println("cube is locked now");
 					
 					if(this.possiblePositions.contains(cube))
 					{
-						System.out.println("remove cube from placeholders");
+//						System.out.println("remove cube from placeholders");
 						this.possiblePositions.remove(cube);
 					}
 				}
