@@ -466,6 +466,14 @@ public class Game
                              	board.changeSelectedCube(0, 0, -1, CubeState.PLACEHOLDER);
                              	break;
                              }
+                             
+                             //ADD CUBE
+                             case Keyboard.KEY_SPACE:
+                             {
+                            	 board.addSelectedCube();
+                            	 break;
+                             }
+                            	 
                      }   
                 }
                

@@ -47,20 +47,20 @@ public class Board
 	{
 		assert(maxX>0 && maxY>0 && maxZ>0);
 		
-		this.maxX = maxX+1;
-		this.maxY = maxY+1;
-		this.maxZ = maxZ+1;
+		this.maxX = maxX;
+		this.maxY = maxY;
+		this.maxZ = maxZ;
 		
 		this.possiblePositions = new ArrayList<Cube>();
 		this.realCubes = new ArrayList<Cube>();
 		
-		this.board = new Cube[this.maxX][this.maxY][this.maxZ];
+		this.board = new Cube[this.maxX+1][this.maxY+1][this.maxZ+1];
 		
-		for(int x = 0; x<this.maxX;x++)
+		for(int x = 0; x<this.maxX+1;x++)
 		{
-			for(int y = 0; y<this.maxY; y++)
+			for(int y = 0; y<this.maxY+1; y++)
 			{
-				for(int z = 0; z<this.maxZ; z++)
+				for(int z = 0; z<this.maxZ+1; z++)
 				{
 					Cube cube = new Cube(x,y,z,Cube.CubeState.LOCKED);
 					
@@ -361,7 +361,7 @@ public class Board
 		ArrayList<int[]> neighbours = new ArrayList<int[]>();
 		
 		//LEFT
-		if(y-1>=0 && y-1<=maxY)
+		if(y-1>=0 && y-1<maxY)
 		{
 			int[] coordinateNeighbourTriple = new int[3]; 
 			
@@ -373,7 +373,7 @@ public class Board
 		}
 		
 		//RIGHT
-		if(y+1>=0 && y+1<=maxY)
+		if(y+1>=0 && y+1<maxY)
 		{
 			int[] coordinateNeighbourTriple = new int[3]; 
 		
@@ -385,7 +385,7 @@ public class Board
 		}
 		
 		//UP
-		if(z+1>=0 && z+1<=maxZ)
+		if(z+1>=0 && z+1<maxZ)
 		{
 			int[] coordinateNeighbourTriple = new int[3]; 
 			
@@ -397,7 +397,7 @@ public class Board
 		}
 		
 		//DOWN
-		if(z-1>=0 && z-1<=maxZ)
+		if(z-1>=0 && z-1<maxZ)
 		{
 			int[] coordinateNeighbourTriple = new int[3]; 
 			
@@ -409,7 +409,7 @@ public class Board
 		}
 		
 		//FRONT
-		if(x+1>=0 && x+1<=maxX)
+		if(x+1>=0 && x+1<maxX)
 		{
 			int[] coordinateNeighbourTriple = new int[3]; 
 			
@@ -421,7 +421,7 @@ public class Board
 		}
 		
 		//BACK
-		if(x-1>=0 && x-1<=maxX)
+		if(x-1>=0 && x-1<maxX)
 		{
 			int[] coordinateNeighbourTriple = new int[3]; 
 			
@@ -555,6 +555,20 @@ public class Board
 	//////////////
 	//CONTROLLER//
 	//////////////
+	public void addSelectedCube()
+	{
+		if(this.currentSelectedCube.getState()==CubeState.PLACEHOLDER)
+		{
+			Cube cube = currentSelectedCube;
+			
+			this.addCubeAt(cube, cube.getBoardCoordinateX(), cube.getBoardCoordinateY(), cube.getBoardCoordinateZ());
+		}
+		else
+		{
+			System.out.println("-----ERROR: CAN NOT ADD CUBE TO BOARD!"); //TODO
+		}
+	}
+	
 	
 	public void addAngle(float angleSignX, float angleSignY)
 	{
