@@ -303,6 +303,36 @@ public class Cube
 		}
 	}
 	
+	public boolean isUpFree()
+	{
+		return this.faceUp.isEmtpy();
+	}
+	
+	public boolean isDownFree()
+	{
+		return this.faceDown.isEmtpy();
+	}
+	
+	public boolean isLeftFree()
+	{
+		return this.faceLeft.isEmtpy();
+	}
+	
+	public boolean isRightFree()
+	{
+		return this.faceRight.isEmtpy();
+	}
+	
+	public boolean isFrontFree()
+	{
+		return this.faceFront.isEmtpy();
+	}
+	
+	public boolean isBackFree()
+	{
+		return this.faceBack.isEmtpy();
+	}
+	
 	public int getCubeIndex()
 	{
 		return this.y; //it's y coordinate because the lane size is the yCoordinate (-> see board.class)
@@ -505,10 +535,11 @@ public class Cube
 				}
 			GL11.glEnd();
 			
-			
 			for(int i = 0; i<this.playersOnFace.size();i++)
 			{
 				Player player = this.playersOnFace.get(i);
+				
+				player.setColour();
 				
 //				GL11.glPushMatrix();
 //					player.render(); //TODO
@@ -548,6 +579,11 @@ public class Cube
 		public String toString()
 		{
 			return this.name;
+		}
+		
+		public void translateRender(int x, int y, int z)
+		{
+			GL11.glVertex3f(this.x+x, this.y+y, this.z+z);
 		}
 	}
 }

@@ -11,6 +11,7 @@ import java.util.Queue;
 
 import models.Cube.CubeState;
 import models.MouseState.MouseButtonState;
+import models.Player.Colour;
 
 import org.lwjgl.LWJGLException;
 import org.lwjgl.Sys;
@@ -74,6 +75,13 @@ public class Game
 		basicCubes.add(new Cube(2,1,1));
 		basicCubes.add(new Cube(3,1,1));
 		basicCubes.add(new Cube(4,1,1));
+		
+		//Add testplayer
+		Player player = new Player("TestPlayer", Colour.BLUE);
+		this.players.add(player);
+		
+		basicCubes.get(1).addPlayer(player, FaceDirection.DOWN);
+		
 		this.board = new Board(basicCubes);
 	}
 

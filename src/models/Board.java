@@ -351,6 +351,11 @@ public class Board
 	}
 	
 	//PRIVATE
+	/**
+	 * 	returns only neighbourcubes which are possible (cubeFace is empty)!
+	 * @param posCurrentCube
+	 * @return
+	 */
 	public ArrayList<int[]> getNeighboursCoordinates(int[] posCurrentCube)
 	{
 		int x = posCurrentCube[0];
@@ -549,6 +554,17 @@ public class Board
 		{
 			c.update(delta);
 		}
+	}
+	
+	
+	public void movePlayer(Player player, FaceDirection direction, int number)
+	{
+		
+	}
+	
+	public void setPlayer(Player player)
+	{
+		//TODO
 	}
 
 	//////////////
