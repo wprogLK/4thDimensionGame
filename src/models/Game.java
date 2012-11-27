@@ -9,6 +9,7 @@ import java.util.LinkedList;
 import java.util.ListIterator;
 import java.util.Queue;
 
+import models.Board.SelectionMode;
 import models.Cube.CubeState;
 import models.MouseState.MouseButtonState;
 import models.Player.Colour;
@@ -479,6 +480,18 @@ public class Game
                              case Keyboard.KEY_SPACE:
                              {
                             	 board.addSelectedCube();
+                            	 break;
+                             }
+                             
+                             //CHANGE SELECTION MODE ON BOARD:
+                             case Keyboard.KEY_1:
+                             {
+                            	 board.changeSelectionMode(SelectionMode.CUBEMode);
+                            	 break;
+                             }
+                             case Keyboard.KEY_2:
+                             {
+                            	 board.changeSelectionMode(SelectionMode.FACEMode);
                             	 break;
                              }
                             	 

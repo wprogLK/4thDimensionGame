@@ -749,6 +749,36 @@ public class Board
 		}
 	}
 	
+	public void changeSelectionMode(SelectionMode mode)
+	{
+		setSelectionMode(mode);
+	
+	}
+	
+	private void setSelectionMode(SelectionMode mode)
+	{
+		if(!this.currentSelectionMode.equals(mode))
+		{
+			if(mode.equals(SelectionMode.FACEMode))
+			{
+				this.currentSelectedCube.setSelected(false);
+				this.currentSelectedCube.setSelectedFace(this.currentSelectedFaceDirection);
+			}
+			else if(mode.equals(SelectionMode.FACEMode))
+			{
+				this.currentSelectedCube.setSelected(true);
+				this.currentSelectedCube.resetAllFaces();
+			}
+			
+			this.currentSelectionMode = mode;
+			System.out.println("NEW Selection mode is " + mode);
+		}
+		
+	
+		
+		
+	}
+	
 	//////////
 	//RENDER//
 	//////////

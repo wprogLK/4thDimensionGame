@@ -446,7 +446,7 @@ public class Cube
 
 	}
 	
-	private void resetAllFaces()
+	public void resetAllFaces()
 	{
 		this.faceUp.setSelected(false);
 		this.faceDown.setSelected(false);
@@ -678,7 +678,7 @@ public class Cube
 			if(this.isSelected)
 			{
 				GL11.glColor4f(1.0f,1.0f, 0.0f, 1.0f);
-				System.out.println("render selected face!");
+//				System.out.println("render selected face!");
 			}
 			else
 			{
@@ -688,14 +688,15 @@ public class Cube
 			if(!this.isEmtpy())
 			{
 				GL11.glColor4f(1.0f,0.0f, 1.0f, 1.0f);
-				System.out.println("face is not empty");  //TODO IMPORTANT: DEBGU THIS!!!! The direction face is inverse (?)
+//				System.out.println("face is not empty");  //TODO IMPORTANT: DEBGU THIS!!!! The direction face is inverse (?)
 			}
 			//TODO render face & player
+			
 			GL11.glBegin(GL11.GL_QUADS);
-				for(CubeVertex vertex:this.vertices)
-				{
-					vertex.render();
-				}
+			for(CubeVertex vertex:this.vertices)
+			{
+				vertex.render();
+			}
 			GL11.glEnd();
 			
 			for(int i = 0; i<this.playersOnFace.size();i++)
