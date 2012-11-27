@@ -37,6 +37,7 @@ public class Board
 	
 	private ArrayList<Cube> possiblePositions;
 	private ArrayList<Cube> realCubes;
+	private ArrayList<Cube> occupiedCubes;
 	
 	private Cube currentSelectedCube;
 	
@@ -53,6 +54,7 @@ public class Board
 		
 		this.possiblePositions = new ArrayList<Cube>();
 		this.realCubes = new ArrayList<Cube>();
+		this.occupiedCubes = new ArrayList<Cube>();
 		
 		this.board = new Cube[this.maxX+1][this.maxY+1][this.maxZ+1];
 		
@@ -100,6 +102,7 @@ public class Board
 		{
 			newSelectedCube.setSelected(true);
 			this.currentSelectedCube = newSelectedCube;
+			System.out.println("selected cube is " + newSelectedCube);
 		}
 	}
 	
@@ -286,21 +289,33 @@ public class Board
 				ArrayList<Cube>neighbours = this.getNeighboursCube(cube.getCoordinates());
 				
 				boolean realNeighbourFound = false;
-				
+				boolean noRealNeighbourHasOnCommonFaceAPlayer = true;
 				for(Cube neighbour:neighbours)
 				{
-//					System.out.println("NeighbourNeighbour of cube " +neighbour + " has state " + neighbourNeighbour.getState());
 					
 					if(neighbour.getState().equals(CubeState.REAL))
 					{
-//						System.out.println("real neighbour found!");
+						FaceDirection neighbourDirection  = cube.getNeighbourDirection(neighbour);
+						FaceDirection commonFace  = neighbourDirection.getOppositeDirection();
+						boolean hasNeighbourOnCommonFaceNoPlayers = neighbour.isFaceEmpty(commonFace);
+						
+						
+//						System.out.println("neighbourDirection is " + neighbourDirection);
+//						System.out.println("commonFace is " + commonFace);
+//						System.out.println("neighboursCommonFace is empty?:" + hasNeighbourOnCommonFaceNoPlayers);
+//						
+						if(!hasNeighbourOnCommonFaceNoPlayers)
+						{
+							noRealNeighbourHasOnCommonFaceAPlayer = false;
+							System.out.println("OCCUPIED: Neigbour: " + neighbour + "of cube " +cube +" has a player on the common face " + commonFace);
+						} 
 						
 						realNeighbourFound = true;
-						break;
+//						break;
 					}
 				}
 				
-				if(realNeighbourFound)
+				if(realNeighbourFound && noRealNeighbourHasOnCommonFaceAPlayer)
 				{
 					cube.setState(CubeState.PLACEHOLDER);
 //					System.out.println("cube is placeholder now");
@@ -310,8 +325,28 @@ public class Board
 //						System.out.println("add cube to placeholders");
 						this.possiblePositions.add(cube);
 					}
+					
+					if(this.occupiedCubes.contains(cube))
+					{
+						this.occupiedCubes.remove(cube);
+					}
 				}
-				else
+				else if(realNeighbourFound && !noRealNeighbourHasOnCommonFaceAPlayer)
+				{
+					cube.setState(CubeState.OCCUPIED);
+					System.out.println("cube ( " + cube + " ) is occupied now");
+					
+					if(this.possiblePositions.contains(cube))
+					{
+//						System.out.println("remove cube from placeholders");
+						this.possiblePositions.remove(cube);
+						
+					}
+					System.out.println("add cube " + cube + " to occupiedCubes");
+					this.occupiedCubes.add(cube);
+				
+				}
+				else if(!realNeighbourFound)
 				{
 					cube.setState(CubeState.LOCKED);
 //					System.out.println("cube is locked now");
@@ -322,6 +357,7 @@ public class Board
 						this.possiblePositions.remove(cube);
 					}
 				}
+				
 			
 			}
 			else
@@ -352,7 +388,7 @@ public class Board
 	
 	//PRIVATE
 	/**
-	 * 	returns only neighbourcubes which are possible (cubeFace is empty)!
+	 * returns all coordinates of the neighbours
 	 * @param posCurrentCube
 	 * @return
 	 */
@@ -518,6 +554,7 @@ public class Board
 				this.realCubes.remove(oldCube);
 				oldCube.setState(CubeState.LOCKED);
 			}
+			
 			this.updateCube(oldCube);
 			this.updateNeighbours(oldCube);
 		}
@@ -538,6 +575,15 @@ public class Board
 //		this.realCubes.get(0).update(delta);
 		this.updateRealCubes(delta);
 		this.updatePlaceholderCubes(delta);
+		this.updateOccupiedCubes(delta);
+	}
+	
+	private void updateOccupiedCubes(int delta)
+	{
+		for(Cube c : this.occupiedCubes)
+		{
+			c.update(delta);
+		}
 	}
 	
 	private void updateRealCubes(int delta)
@@ -559,7 +605,7 @@ public class Board
 	
 	public void movePlayer(Player player, FaceDirection direction, int number)
 	{
-		
+		//TODO
 	}
 	
 	public void setPlayer(Player player)
@@ -660,6 +706,7 @@ public class Board
 		GL11.glTranslatef(-this.center[0]*Cube.getWidth(),-this.center[1]*Cube.getHeight(), -this.center[2]*Cube.getDeepth());
 		this.renderRealCubes();
 		this.renderPlaceholderCubes();
+		this.renderOccupiedCubes();
 		this.renderBoard();
 		
 		GL11.glPopMatrix();
@@ -671,6 +718,16 @@ public class Board
 		
 	}
 
+	private void renderOccupiedCubes() 
+	{
+//		this.possiblePositions.get(0).render();
+		for(Cube c: this.occupiedCubes)
+		{
+			c.render();
+		}
+		
+	}
+	
 	private void renderPlaceholderCubes() 
 	{
 //		this.possiblePositions.get(0).render();

@@ -66,7 +66,8 @@ public class Cube
 	{
 		LOCKED("L",0.0f,0.0f,0.0f,0.0f),
 		PLACEHOLDER("P",0.0f,1.0f,0.0f,0.1f),
-		REAL("R",0.0f,0.0f,1.0f,1.0f);
+		REAL("R",0.0f,0.0f,1.0f,1.0f),
+		OCCUPIED("O",1.0f,1.0f,1.0f,0.3f); //if one or more players are on a face of a neighbour cube
 		
 		private float colourRed;
 		private float colourGreen;
@@ -303,34 +304,70 @@ public class Cube
 		}
 	}
 	
-	public boolean isUpFree()
-	{
-		return this.faceUp.isEmtpy();
-	}
+//	public boolean isUpFree()
+//	{
+//		return this.faceUp.isEmtpy();
+//	}
+//	
+//	public boolean isDownFree()
+//	{
+//		return this.faceDown.isEmtpy();
+//	}
+//	
+//	public boolean isLeftFree()
+//	{
+//		return this.faceLeft.isEmtpy();
+//	}
+//	
+//	public boolean isRightFree()
+//	{
+//		return this.faceRight.isEmtpy();
+//	}
+//	
+//	public boolean isFrontFree()
+//	{
+//		return this.faceFront.isEmtpy();
+//	}
+//	
+//	public boolean isBackFree()
+//	{
+//		return this.faceBack.isEmtpy();
+//	}
 	
-	public boolean isDownFree()
+	public boolean isFaceEmpty(FaceDirection face)
 	{
-		return this.faceDown.isEmtpy();
-	}
-	
-	public boolean isLeftFree()
-	{
-		return this.faceLeft.isEmtpy();
-	}
-	
-	public boolean isRightFree()
-	{
-		return this.faceRight.isEmtpy();
-	}
-	
-	public boolean isFrontFree()
-	{
-		return this.faceFront.isEmtpy();
-	}
-	
-	public boolean isBackFree()
-	{
-		return this.faceBack.isEmtpy();
+		switch(face)
+		{
+			case UP:
+			{
+				return this.faceUp.isEmtpy();
+			}
+			case DOWN:
+			{
+				return this.faceDown.isEmtpy();
+			}
+			case LEFT:
+			{
+				return this.faceLeft.isEmtpy();
+			}
+			case RIGHT:
+			{
+				return this.faceRight.isEmtpy();
+			}
+			case BACK:
+			{
+				return this.faceBack.isEmtpy();
+			}
+			case FRONT:
+			{
+				return this.faceFront.isEmtpy();
+			}
+			default:
+			{
+				System.out.println("Error: unknown faceDirection in isFaceEmpty-Method in Cube!"); //TODO throw an exception
+				return true;
+			}
+		}
 	}
 	
 	public int getCubeIndex()
@@ -443,6 +480,43 @@ public class Cube
 		}
 	}
 		
+	
+	public FaceDirection getNeighbourDirection(Cube cube)
+	{
+		int neighbourX = cube.getBoardCoordinateX();
+		int neighbourY = cube.getBoardCoordinateY();
+		int neighbourZ = cube.getBoardCoordinateZ();
+		
+		if(this.x==neighbourX && this.y == neighbourY && this.z == neighbourZ+1)
+		{
+			return FaceDirection.FRONT;		//Neighbour is in front of this cube
+		}
+		else if(this.x==neighbourX && this.y == neighbourY && this.z == neighbourZ-1)
+		{
+			return FaceDirection.BACK;		//Neighbour is on the back of this cube
+		}
+		else if(this.x==neighbourX && this.y == neighbourY+1 && this.z == neighbourZ)
+		{
+			return FaceDirection.UP;		
+		}
+		else if(this.x==neighbourX && this.y == neighbourY-1 && this.z == neighbourZ)
+		{
+			return FaceDirection.DOWN;		
+		}
+		else if(this.x==neighbourX+1 && this.y == neighbourY && this.z == neighbourZ)
+		{
+			return FaceDirection.RIGHT;		
+		}
+		else if(this.x==neighbourX-1 && this.y == neighbourY && this.z == neighbourZ)
+		{
+			return FaceDirection.LEFT;		
+		}
+		else
+		{
+			System.out.println("ERROR: The cube " + cube + " is not a neighbour of " + this);
+			return null; //TODO throw an exception, because the cube is not a neighbour of this cube!
+		}
+	}
 	//////////////
 	//FACE CLASS//
 	//////////////
