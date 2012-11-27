@@ -40,6 +40,15 @@ public class Board
 	private ArrayList<Cube> occupiedCubes;
 	
 	private Cube currentSelectedCube;
+	private FaceDirection currentSelectedFaceDirection;
+	
+	public enum SelectionMode
+	{
+		CUBEMode,
+		FACEMode;
+	}
+	
+	private SelectionMode currentSelectionMode = SelectionMode.CUBEMode;
 	
 	/*
 	 * This constructor shouldn't used in the final game!
@@ -88,7 +97,36 @@ public class Board
 		if(!this.possiblePositions.isEmpty())
 		{
 			this.setSelectedCube(this.possiblePositions.get(0));
+			this.resetCurrentSelectedFaceDirection();
 		}
+	}
+	
+	private void resetCurrentSelectedFaceDirection()
+	{
+		ArrayList<Cube> neighbours = this.getNeighbourCubesOf(this.currentSelectedCube);
+		
+		for(Cube neighbour:neighbours)
+		{
+			if(!neighbour.getState().equals(CubeState.REAL) && !neighbour.getState().equals(CubeState.LOCKED))
+			{
+				FaceDirection neighbourFaceDirection = this.currentSelectedCube.getNeighbourDirection(neighbour);
+				FaceDirection commonFace = neighbourFaceDirection.getOppositeDirection();
+				
+				if(neighbour.isFaceEmpty(commonFace) && this.currentSelectedCube.isFaceEmpty(neighbourFaceDirection))
+				{
+					this.currentSelectedFaceDirection = commonFace;
+					System.out.println("current selected face is " + neighbourFaceDirection);
+					this.currentSelectedCube.setSelectedFace(neighbourFaceDirection);
+					
+					break;
+				}
+			}
+		}
+	}
+	
+	private ArrayList<Cube> getNeighbourCubesOf(Cube cube)
+	{
+		return this.getNeighboursCube(cube.getCoordinates());
 	}
 	
 	private void setSelectedCube(Cube newSelectedCube)
@@ -637,7 +675,25 @@ public class Board
 		this.angleY += angleSignY*this.angleStep;
 	}
 	
-	public void changeSelectedCube(int dx,int dy, int dz, CubeState stateOfSelectedCube)
+	public void changeSelection(int dx, int dy, int dz)
+	{
+		if(this.currentSelectionMode.equals(SelectionMode.CUBEMode))
+		{
+			this.changeSelectedCube(dx, dy, dz);
+		}
+		else
+		{
+			this.changeSelectedFace(dx,dy,dz);
+		}
+		
+	}
+	
+	private void changeSelectedFace(int dx, int dy, int dz)
+	{
+		//TODO
+	}
+
+	private void changeSelectedCube(int dx,int dy, int dz)
 	{
 		if(this.currentSelectedCube != null)
 		{

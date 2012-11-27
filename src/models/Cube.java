@@ -10,6 +10,8 @@ import java.util.Collections;
 
 import javax.swing.event.ListSelectionEvent;
 
+import models.Board.SelectionMode;
+
 import org.lwjgl.opengl.GL11;
 
 import com.sun.xml.internal.bind.v2.schemagen.xmlschema.List;
@@ -444,6 +446,66 @@ public class Cube
 
 	}
 	
+	private void resetAllFaces()
+	{
+		this.faceUp.setSelected(false);
+		this.faceDown.setSelected(false);
+		this.faceLeft.setSelected(false);
+		this.faceRight.setSelected(false);
+		this.faceFront.setSelected(false);
+		this.faceBack.setSelected(false);
+	}
+	
+	public void setSelectedFace(FaceDirection face) 
+	{
+		switch(face)
+		{
+			case UP:
+			{
+				this.resetAllFaces();
+				this.faceUp.setSelected(true);
+				break;
+			}
+			case DOWN:
+			{
+				this.resetAllFaces();
+				this.faceDown.setSelected(true);
+				break;
+			}
+			case LEFT:
+			{
+				this.resetAllFaces();
+				this.faceLeft.setSelected(true);
+				break;
+			}
+			case RIGHT:
+			{
+				this.resetAllFaces();
+				this.faceRight.setSelected(true);
+				break;
+			}
+			case BACK:
+			{
+				this.resetAllFaces();
+				this.faceBack.setSelected(true);
+				break;
+			}
+			case FRONT:
+			{
+				this.resetAllFaces();
+				this.faceFront.setSelected(true);
+				break;
+			}
+			default:
+			{
+				System.out.println("Error: unknown faceDirection in setSelected() in Cube!"); //TODO throw an exception
+			}
+		}
+		
+	}
+		
+	
+	
 	//////////
 	//RENDER//
 	//////////
@@ -464,7 +526,6 @@ public class Cube
 		this.faceUp.render();
 		this.faceRight.render();
 		this.faceLeft.render();
-		
 	}
 	
 	private void setColour()
@@ -479,7 +540,8 @@ public class Cube
 			GL11.glColor4f(1.0f, 0.0f, 0.0f, 1.0f); //Color for selected cube
 		}
 	}
-		
+	
+	
 	
 	public FaceDirection getNeighbourDirection(Cube cube)
 	{
@@ -529,6 +591,7 @@ public class Cube
 		private int maxCapacity; 
 		
 		private FaceDirection direction;
+		private boolean isSelected = false; 
 		
 		private CubeVertex[] vertices;
 		
@@ -548,6 +611,16 @@ public class Cube
 			
 			this.playersOnFace = new ArrayList<Player>();
 			this.vertices = new CubeVertex[4];
+		}
+		
+		public void setSelected(boolean isSelected)
+		{
+			this.isSelected = isSelected;
+		}
+		
+		public boolean isSelected()
+		{
+			return this.isSelected;
 		}
 		
 		public void setVertices(ArrayList<CubeVertex> vertices)
@@ -601,6 +674,22 @@ public class Cube
 		
 		public void render()
 		{
+			//TODO make a difference between selected and unselected face!
+			if(this.isSelected)
+			{
+				GL11.glColor4f(1.0f,1.0f, 0.0f, 1.0f);
+				System.out.println("render selected face!");
+			}
+			else
+			{
+				System.out.println("DONT render selected face!");
+			}
+			
+			if(!this.isEmtpy())
+			{
+				GL11.glColor4f(1.0f,1.0f, 1.0f, 1.0f);
+				System.out.println("face is not empty");
+			}
 			//TODO render face & player
 			GL11.glBegin(GL11.GL_QUADS);
 				for(CubeVertex vertex:this.vertices)
@@ -660,4 +749,6 @@ public class Cube
 			GL11.glVertex3f(this.x+x, this.y+y, this.z+z);
 		}
 	}
+
+	
 }

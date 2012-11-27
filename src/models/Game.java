@@ -446,32 +446,32 @@ public class Game
                              //CHANGE SELECTED CUBE: (at the moment only placeholder cubes!)
                              case Keyboard.KEY_A:
                              {
-                             	board.changeSelectedCube(-1, 0, 0, CubeState.PLACEHOLDER);
+                             	board.changeSelection(-1, 0, 0);//, CubeState.PLACEHOLDER);
                              	break;
                              }
                              case Keyboard.KEY_D:
                              {
-                             	board.changeSelectedCube(1, 0, 0, CubeState.PLACEHOLDER);
+                             	board.changeSelection(1, 0, 0);//, CubeState.PLACEHOLDER);
                              	break;
                              }
                              case Keyboard.KEY_W:
                              {
-                             	board.changeSelectedCube(0, 1, 0, CubeState.PLACEHOLDER);
+                             	board.changeSelection(0, 1, 0);//, CubeState.PLACEHOLDER);
                              	break;
                              }
                              case Keyboard.KEY_S:
                              {
-                             	board.changeSelectedCube(0, -1, 0, CubeState.PLACEHOLDER);
+                             	board.changeSelection(0, -1, 0);//, CubeState.PLACEHOLDER);
                              	break;
                              }
                              case Keyboard.KEY_Q:
                              {
-                             	board.changeSelectedCube(0, 0, 1, CubeState.PLACEHOLDER);
+                             	board.changeSelection(0, 0, 1);//, CubeState.PLACEHOLDER);
                              	break;
                              }
                              case Keyboard.KEY_Y:
                              {
-                             	board.changeSelectedCube(0, 0, -1, CubeState.PLACEHOLDER);
+                             	board.changeSelection(0, 0, -1);//, CubeState.PLACEHOLDER);
                              	break;
                              }
                              
