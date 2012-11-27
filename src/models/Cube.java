@@ -682,13 +682,13 @@ public class Cube
 			}
 			else
 			{
-				System.out.println("DONT render selected face!");
+//				System.out.println("DONT render selected face!");
 			}
 			
 			if(!this.isEmtpy())
 			{
-				GL11.glColor4f(1.0f,1.0f, 1.0f, 1.0f);
-				System.out.println("face is not empty");
+				GL11.glColor4f(1.0f,0.0f, 1.0f, 1.0f);
+				System.out.println("face is not empty");  //TODO IMPORTANT: DEBGU THIS!!!! The direction face is inverse (?)
 			}
 			//TODO render face & player
 			GL11.glBegin(GL11.GL_QUADS);

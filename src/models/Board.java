@@ -333,9 +333,9 @@ public class Board
 					
 					if(neighbour.getState().equals(CubeState.REAL))
 					{
-						FaceDirection neighbourDirection  = cube.getNeighbourDirection(neighbour);
-						FaceDirection commonFace  = neighbourDirection.getOppositeDirection();
-						boolean hasNeighbourOnCommonFaceNoPlayers = neighbour.isFaceEmpty(commonFace);
+						FaceDirection neighbourDirection  = cube.getNeighbourDirection(neighbour);		//TODO IMPORTANT: DEBGU THIS!!!! The direction face is inverse (?)
+//						FaceDirection commonFace  = neighbourDirection.getOppositeDirection();
+						boolean hasNeighbourOnCommonFaceNoPlayers = neighbour.isFaceEmpty(neighbourDirection);
 						
 						
 //						System.out.println("neighbourDirection is " + neighbourDirection);
@@ -345,7 +345,7 @@ public class Board
 						if(!hasNeighbourOnCommonFaceNoPlayers)
 						{
 							noRealNeighbourHasOnCommonFaceAPlayer = false;
-							System.out.println("OCCUPIED: Neigbour: " + neighbour + "of cube " +cube +" has a player on the common face " + commonFace);
+//							System.out.println("OCCUPIED: Neigbour: " + neighbour + "of cube " +cube +" has a player on the common face " + commonFace);
 						} 
 						
 						realNeighbourFound = true;
