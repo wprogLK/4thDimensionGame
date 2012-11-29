@@ -3,6 +3,8 @@
  */
 package models;
 
+import interfaces.IGraphicDriver;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.LinkedList;
@@ -37,7 +39,7 @@ public class Game
 { 
 	private boolean gameOver;
 	
-	private GraphicDriver driver;
+	private IGraphicDriver driver;
 	
 	private MouseHandler mouseHandler;
 	private KeyboardHandler keyboardHandler;
@@ -62,7 +64,8 @@ public class Game
 		this.currentPlayer = null;
 		this.gameOver = false;
 		
-		this.driver = new GraphicDriver(this);
+//		this.driver = new GraphicDriver(this);
+		this.driver = new GraphicDriverApplet(this);
 		
 		this.mouseHandler = new MouseHandler();
 		this.keyboardHandler = new KeyboardHandler();
@@ -103,6 +106,7 @@ public class Game
 		}
 	}
 
+	
 	@OnlyForTesting
 	public Player getCurrentPlayer()
 	{
@@ -146,7 +150,7 @@ public class Game
 	
 	private void start()
 	{
-		this.driver.start();
+		this.driver.startDriver();
 	}
 	
 	public void update(int delta)

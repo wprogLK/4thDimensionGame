@@ -8,17 +8,19 @@ import org.lwjgl.opengl.DisplayMode;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.util.glu.GLU;
 
-public class GraphicDriver 
+import interfaces.IGraphicDriver;
+
+public class GraphicDriver implements IGraphicDriver
 {
-	private Game game;
+	protected Game game;
 	
 	private long lastFrame; //Time at the last frame
 	
 	private int fps; //frames per second
 	private long lastFPS; //last fps time
 	
-	private int windowWidth;
-	private int windowHeight;
+	protected int windowWidth;
+	protected int windowHeight;
 	
 	private int windowDefaultWidth = 800;
 	private int windowDefaultHeight = 600;
@@ -56,9 +58,8 @@ public class GraphicDriver
 		this.game = game;
 	}
 	
-	public void start()
+	public final void start()
 	{
-		this.setupDisplay();
 		this.setupGL();
 		
 		this.getDelta();
@@ -67,17 +68,40 @@ public class GraphicDriver
 		this.runGameLoop();
 	}
 	
-	private void setupDisplay()
+	public final void startDriver()
 	{
-		try
+		this.setupDisplay();
+		
+//		try 
+//		{
+//			Display.create();
+//		} 
+//		catch (LWJGLException e)
+//		{
+//			// TODO Auto-generated catch block
+//			e.printStackTrace();
+//		}
+//		
+		System.out.println("Start driver basic");
+		this.start();
+	}
+	
+	public void stopDriver()
+	{
+		//TODO
+		System.out.println("Stop driver");
+	}
+	
+	protected void setupDisplay()
+	{
+		try 
 		{
 			Display.setDisplayMode(new DisplayMode(this.windowWidth, this.windowHeight));
 			Display.create();
-		}
-		catch(LWJGLException e)
+		} 
+		catch (LWJGLException e) 
 		{
 			e.printStackTrace();
-			System.exit(0);
 		}
 	}
 	
@@ -118,6 +142,11 @@ public class GraphicDriver
 			Display.sync(60);
 		}
 		
+		this.destroy();
+	}
+	
+	public void destroy()
+	{
 		Display.destroy();
 	}
 
@@ -148,7 +177,17 @@ public class GraphicDriver
 		this.fps++;
 	}
 	
-	private void setupGL()
+	public int getWindowWidth()
+	{
+		return this.windowWidth;
+	}
+	
+	public int getWindowHeight()
+	{
+		return this.windowHeight;
+	}
+	
+	protected void setupGL()
 	{
 		GL11.glEnable(GL11.GL_DEPTH_TEST); //GL forbid to "overpaint" given pixels.
 		
