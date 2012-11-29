@@ -39,6 +39,8 @@ public class Game
 	
 	private GraphicDriver driver;
 	
+	private MouseHandler mouseHandler;
+	private KeyboardHandler keyboardHandler;
 	
 	private Queue<Player> players;
 	@OnlyForTesting
@@ -60,7 +62,10 @@ public class Game
 		this.currentPlayer = null;
 		this.gameOver = false;
 		
-		this.driver = new GraphicDriver();
+		this.driver = new GraphicDriver(this);
+		
+		this.mouseHandler = new MouseHandler();
+		this.keyboardHandler = new KeyboardHandler();
 		
 		initTestBoard();
 		
@@ -129,6 +134,12 @@ public class Game
 		return this.gameOver;
 	}
 
+	public void checkInput() 
+	{
+		this.mouseHandler.check();
+		this.keyboardHandler.check();
+	}
+	
 	///////////////////
 	//PRIVATE METHODS//
 	///////////////////
@@ -138,14 +149,14 @@ public class Game
 		this.driver.start();
 	}
 	
-	private void updateGame(int delta)
+	public void update(int delta)
 	{
 		//TODO
 //		System.out.println("Update the game here...");
 		this.board.update(delta);
 	}
 
-	private void renderGame()
+	public void render()
 	{
 //		System.out.println("Render the game here...");
 		this.board.render();
@@ -154,188 +165,6 @@ public class Game
 	//INNER CLASS//
 	///////////////
 	
-	private class GraphicDriver
-	{
-		private long lastFrame; //Time at the last frame
-		
-		private int fps; //frames per second
-		private long lastFPS; //last fps time
-		
-		private int windowWidth;
-		private int windowHeight;
-		
-		private int windowDefaultWidth = 800;
-		private int windowDefaultHeight = 600;
-		
-		private float nearPlane;
-		private float farPlane;
-		private float viewAngle;
-		
-		private float nearPlaneDefault = 0.1f;
-		private float farPlaneDefault = 1000.0f;
-		private float viewAngleDefault =45.0f;//45.0f;
-		
-		private MouseHandler mouseHandler;
-		private KeyboardHandler keyboardHandler;
-		
-		public GraphicDriver(int windowWidth, int windowHeight, float nearPlane, float farPlane, float viewAngle)
-		{
-			this.windowWidth = windowWidth;
-			this.windowHeight = windowHeight;
-			
-			this.nearPlane = nearPlane;
-			this.farPlane = farPlane;
-			this.viewAngle = viewAngle;
-		}
-		
-		public GraphicDriver()
-		{
-			this.windowWidth = windowDefaultWidth;
-			this.windowHeight = windowDefaultHeight;
-			
-			this.nearPlane = this.nearPlaneDefault;
-			this.farPlane = this.farPlaneDefault;
-			
-			this.viewAngle = this.viewAngleDefault;
-		}
-		
-		public void start()
-		{
-			this.setupDisplay();
-			this.setupGL();
-			this.setupHandler();
-			
-			this.getDelta();
-			this.lastFPS = this.getTime();
-			
-			this.runGameLoop();
-		}
-		
-		private void setupHandler()
-		{
-			this.mouseHandler = new MouseHandler();
-			this.keyboardHandler = new KeyboardHandler();
-		}
-		
-		private void setupDisplay()
-		{
-			try
-			{
-				Display.setDisplayMode(new DisplayMode(this.windowWidth, this.windowHeight));
-				Display.create();
-			}
-			catch(LWJGLException e)
-			{
-				e.printStackTrace();
-				System.exit(0);
-			}
-		}
-		
-		/*need to render the scene twice because of the transparency objects!
-		 * render 1) draw the entire scene with depth testing on for all the opaque fragments
-		 * render 2) draw the entire scene again with the depth buffer read only.
-		 *(Source: http://relativity.net.au/gaming/java/Transparency.html)
-		 */
-		
-		private void runGameLoop()
-		{
-			while(!gameOver && !Display.isCloseRequested())
-			{
-				int delta = this.getDelta(); //for interpolation ?
-				
-				checkInput();
-				
-				updateGame(delta);
-				this.updateFPS();
-				
-				GL11.glDepthMask(true);
-				this.prepareForRendering();
-				
-				//first render
-				GL11.glDisable(GL11.GL_BLEND);
-                GL11.glAlphaFunc(GL11.GL_EQUAL, 1.0f);
-                
-				renderGame();
-				
-				//second render
-				GL11.glEnable(GL11.GL_BLEND);
-                GL11.glDepthMask(false);
-                GL11.glAlphaFunc(GL11.GL_LESS, 1.0f);
-
-                renderGame();
-                
-				Display.update();
-				Display.sync(60);
-			}
-			
-			Display.destroy();
-		}
-
-		private int getDelta()
-		{
-			long time = getTime();
-			int delta = (int) (time - this.lastFrame);
-			this.lastFrame = time;
-			
-			return delta;
-		}
-		
-		private long getTime()
-		{
-			return (Sys.getTime()*1000)/Sys.getTimerResolution();
-		}
-		
-		private void updateFPS()
-		{
-			if(this.getTime() - lastFPS >1000)
-			{
-				Display.setTitle("FPS: " + fps);
-				fps = 0;
-				
-				this.lastFPS +=1000;
-			}
-			
-			this.fps++;
-		}
-		
-		private void setupGL()
-		{
-			GL11.glEnable(GL11.GL_DEPTH_TEST); //GL forbid to "overpaint" given pixels.
-			
-			GL11.glEnable(GL11.GL_ALPHA_TEST);
-            GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
-			GL11.glViewport(0,0,this.windowWidth,this.windowHeight); //origin coordinates at (0|0)
-
-			GL11.glMatrixMode(GL11.GL_PROJECTION);
-			GL11.glLoadIdentity(); //Load the standard matrix
-			
-			GLU.gluPerspective(this.viewAngle, this.windowWidth/this.windowHeight, this.nearPlane, this.farPlane);
-			GL11.glMatrixMode(GL11.GL_MODELVIEW);
-		}
-		
-		private void prepareForRendering()
-		{
-			GL11.glClear(GL11.GL_COLOR_BUFFER_BIT | GL11.GL_DEPTH_BUFFER_BIT);
-			GL11.glColor3f(0.5f, 0.5f, 1.0f);
-			GL11.glLoadIdentity(); //Load the standard matrix
-//			GL11.glTranslated(0.0f,-10.0f,-60.0f); //TODO try other values
-//			GL11.glTranslated(+this.windowWidth/2,-this.windowHeight/2,-160.0f); //TODO try other values //x=-15.0f
-			GL11.glTranslated(0,-10,-160.0f); //TODO try other values //x=-15.0f
-		}
-		
-		
-		///////////////
-		//Check input//
-		///////////////
-		
-		private void checkInput() 
-		{
-			this.mouseHandler.check();
-			this.keyboardHandler.check();
-		}
-
-	}
-
 	private class MouseHandler
 	{
 		private int leftButton = 0;
