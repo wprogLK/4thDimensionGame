@@ -690,7 +690,112 @@ public class Board
 	
 	private void changeSelectedFace(int dx, int dy, int dz)
 	{
-		//TODO
+		
+		int newX = this.currentSelectedCube.getBoardCoordinateX()+dx;
+		int newY = this.currentSelectedCube.getBoardCoordinateX()+dy;
+		int newZ = this.currentSelectedCube.getBoardCoordinateX()+dz;
+		
+		FaceDirection moveDirection;
+		
+		
+		if(dx!=0)
+		{
+			if(dx<0)
+			{
+				moveDirection = FaceDirection.LEFT;
+			}
+			else
+			{
+				moveDirection = FaceDirection.RIGHT;
+			}
+			
+			if(newX<0) //OutOfTheBoard
+			{
+				this.moveFace(moveDirection);
+			}
+			else if(newX>=this.maxX) //OutOfTheBoard
+			{
+				this.moveFace(moveDirection);
+			}
+			else
+			{
+				if(this.isRealNeigbourThere(newX, newY, newZ))
+				{
+					//TODO move cube
+					System.out.println("Move cube!");
+				}
+				else
+				{
+					//TODO move face aside
+					System.out.println("Move face!");
+				}
+			}
+		}
+		else if(dy!=0)
+		{
+			if(dy<0)
+			{
+				moveDirection = FaceDirection.DOWN;
+			}
+			else
+			{
+				moveDirection = FaceDirection.UP;
+			}
+			
+			if(newY<0)
+			{
+				
+			}
+			else if(newY>=this.maxY)
+			{
+				
+			}
+			else
+			{
+				
+			}
+		}
+		else if(dz!=0)
+		{
+			if(dz<0)
+			{
+				moveDirection = FaceDirection.BACK;
+			}
+			else
+			{
+				moveDirection = FaceDirection.FRONT;
+			}
+			
+			if(newZ<0)
+			{
+
+			}
+			else if(newZ>=this.maxZ)
+			{
+				
+			}
+			else
+			{
+				if(this.isRealNeigbourThere(newX, newY, newZ))
+				{
+					//TODO move cube
+				}
+				else
+				{
+					//TODO move face aside
+				}
+			}
+		}
+	}
+	
+	private void moveFace(FaceDirection direction) //TODO DEBUG & TEST THIS!
+	{
+		
+	}
+	
+	private boolean isRealNeigbourThere(int x,int y, int z)
+	{
+		return this.getCubeAt(x, y, z).getState().equals(CubeState.REAL);
 	}
 
 	private void changeSelectedCube(int dx,int dy, int dz)
