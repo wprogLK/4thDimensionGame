@@ -14,10 +14,10 @@ public class GraphicDriver implements IGraphicDriver
 {
 	protected Game game;
 	
-	private long lastFrame; //Time at the last frame
+	protected long lastFrame; //Time at the last frame
 	
-	private int fps; //frames per second
-	private long lastFPS; //last fps time
+	protected int fps; //frames per second
+	protected long lastFPS; //last fps time
 	
 	protected int windowWidth;
 	protected int windowHeight;
@@ -58,7 +58,12 @@ public class GraphicDriver implements IGraphicDriver
 		this.game = game;
 	}
 	
-	public final void start()
+	public void start()
+	{
+		runDriver();
+	}
+	
+	public void runDriver()
 	{
 		this.setupGL();
 		
@@ -70,6 +75,7 @@ public class GraphicDriver implements IGraphicDriver
 	
 	public final void startDriver()
 	{
+		System.out.println("Start driver basic");
 		this.setupDisplay();
 		
 //		try 
@@ -111,7 +117,7 @@ public class GraphicDriver implements IGraphicDriver
 	 *(Source: http://relativity.net.au/gaming/java/Transparency.html)
 	 */
 	
-	private void runGameLoop()
+	protected void runGameLoop()
 	{
 		while(!this.game.isGameOver() && !Display.isCloseRequested())
 		{
@@ -150,7 +156,7 @@ public class GraphicDriver implements IGraphicDriver
 		Display.destroy();
 	}
 
-	private int getDelta()
+	protected int getDelta()
 	{
 		long time = getTime();
 		int delta = (int) (time - this.lastFrame);
@@ -159,12 +165,12 @@ public class GraphicDriver implements IGraphicDriver
 		return delta;
 	}
 	
-	private long getTime()
+	protected long getTime()
 	{
 		return (Sys.getTime()*1000)/Sys.getTimerResolution();
 	}
 	
-	private void updateFPS()
+	protected void updateFPS()
 	{
 		if(this.getTime() - lastFPS >1000)
 		{
@@ -189,6 +195,8 @@ public class GraphicDriver implements IGraphicDriver
 	
 	protected void setupGL()
 	{
+		System.out.println("setupGL...");
+		
 		GL11.glEnable(GL11.GL_DEPTH_TEST); //GL forbid to "overpaint" given pixels.
 		
 		GL11.glEnable(GL11.GL_ALPHA_TEST);

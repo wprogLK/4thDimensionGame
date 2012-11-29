@@ -39,7 +39,7 @@ public class Game
 { 
 	private boolean gameOver;
 	
-	private IGraphicDriver driver;
+	private GraphicDriverApplet driver;
 	
 	private MouseHandler mouseHandler;
 	private KeyboardHandler keyboardHandler;
@@ -52,7 +52,7 @@ public class Game
 	
 	public static void main(String args[])
 	{
-		new Game();
+		new Game().start();
 	}
 	
 	/**
@@ -72,7 +72,12 @@ public class Game
 		
 		initTestBoard();
 		
-		this.start();
+//		this.start();
+	}
+	
+	public GraphicDriverApplet getGraphicDriverApplet()
+	{
+		return this.driver;
 	}
 	
 	@OnlyForTesting
@@ -142,6 +147,11 @@ public class Game
 	{
 		this.mouseHandler.check();
 		this.keyboardHandler.check();
+	}
+	
+	public void setGameOver(boolean b) 
+	{
+		this.gameOver = b;
 	}
 	
 	///////////////////
@@ -334,4 +344,6 @@ public class Game
 			}
 		}
 	}
+
+	
 }

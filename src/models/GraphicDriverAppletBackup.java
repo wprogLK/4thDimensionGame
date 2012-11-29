@@ -15,7 +15,7 @@ import org.lwjgl.opengl.DisplayMode;
  * @author Lukas
  *
  */
-public class GraphicDriverApplet extends GraphicDriver 
+public class GraphicDriverAppletBackup extends GraphicDriver 
 {
 	private Canvas displayParent;
 	private Applet applet;
@@ -29,7 +29,7 @@ public class GraphicDriverApplet extends GraphicDriver
 	 * @param viewAngle
 	 * @param game
 	 */
-	public GraphicDriverApplet(int windowWidth, int windowHeight,float nearPlane, float farPlane, float viewAngle, Game game)
+	public GraphicDriverAppletBackup(int windowWidth, int windowHeight,float nearPlane, float farPlane, float viewAngle, Game game)
 	{
 		super(windowWidth, windowHeight, nearPlane, farPlane, viewAngle, game);
 //		this.initApplet();
@@ -38,23 +38,18 @@ public class GraphicDriverApplet extends GraphicDriver
 	/**
 	 * @param game
 	 */
-	public GraphicDriverApplet(Game game) 
+	public GraphicDriverAppletBackup(Game game) 
 	{
 		super(game);
 //		this.initApplet();
 	}
 	
-	public void addApplet(AppletDriver appletDriver)
-	{
-		this.applet = appletDriver;
-	}
-	
 	
 	protected void setupDisplay()
 	{
-//		System.out.println("setupDisplay in applet");
+		System.out.println("setupDisplay in applet");
 		
-//		this.applet = new Applet();
+		this.applet = new Applet();
 		this.applet.setLayout(new BorderLayout());
 		try
 		{
@@ -133,37 +128,28 @@ public class GraphicDriverApplet extends GraphicDriver
 //		
 //		this.runGameLoop();
 		
-		if(gameThread!=null)
+		this.gameThread = new Thread()
 		{
-			this.gameThread = new Thread()
+			public void run()
 			{
-				public void run()
+				game.setGameOver(false);
+				
+				try
 				{
-					game.setGameOver(false);
-					
-					try
-					{
-						Display.setParent(displayParent);
-						Display.create();
-						setupGL();
-					}
-					catch(LWJGLException e)
-					{
-						e.printStackTrace();
-						return;
-					}
-					
-//					runDriver();
-					
+					Display.setParent(displayParent);
+					Display.create();
 					setupGL();
-					
-					getDelta();
-					lastFPS = getTime();
 				}
-			};
-			gameThread.start();
-		}
-		
+				catch(LWJGLException e)
+				{
+					e.printStackTrace();
+					return;
+				}
+				
+				runGameLoop();
+			}
+		};
+		gameThread.start();
 		}
 	
 	
