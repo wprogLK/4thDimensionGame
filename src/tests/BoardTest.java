@@ -15,6 +15,7 @@ import org.junit.runner.RunWith;
 
 import ch.unibe.jexample.Given;
 import ch.unibe.jexample.JExample;
+import exceptions.BoardException;
 import static org.junit.Assert.*;
 //
 //import static org.hamcrest.collection.IsArrayContaining.*;
@@ -48,7 +49,7 @@ public class BoardTest
 	}
 	
 	@Given("SimpleBoardTest")
-	public Board boardShouldHaveOneRealCubeAt2_2_2(Board board)
+	public Board boardShouldHaveOneRealCubeAt2_2_2(Board board) throws BoardException
 	{
 		Cube cube = board.getCubeAt(2, 2, 2);
 		assert(cube.getState().equals(CubeState.REAL));
@@ -67,7 +68,7 @@ public class BoardTest
 	}
 	
 	@Given("boardShouldHaveOneRealCubeAt2_2_2")
-	public Board boardShouldHaveAPlaceholderAt1_2_2(Board board)
+	public Board boardShouldHaveAPlaceholderAt1_2_2(Board board) throws BoardException
 	{
 		Cube cube = board.getCubeAt(1, 2, 2);
 		
@@ -77,7 +78,7 @@ public class BoardTest
 	}
 	
 	@Given("boardShouldHaveOneRealCubeAt2_2_2")
-	public Board boardShouldHaveAPlaceholderAt3_2_2(Board board)
+	public Board boardShouldHaveAPlaceholderAt3_2_2(Board board) throws BoardException
 	{
 		Cube cube = board.getCubeAt(3, 2, 2);
 		
@@ -87,7 +88,7 @@ public class BoardTest
 	}
 	
 	@Given("boardShouldHaveOneRealCubeAt2_2_2")
-	public Board boardShouldHaveAPlaceholderAt2_1_2(Board board)
+	public Board boardShouldHaveAPlaceholderAt2_1_2(Board board) throws BoardException
 	{
 		Cube cube = board.getCubeAt(2, 1, 2);
 		
@@ -97,7 +98,7 @@ public class BoardTest
 	}
 	
 	@Given("boardShouldHaveOneRealCubeAt2_2_2")
-	public Board boardShouldHaveAPlaceholderAt2_3_2(Board board)
+	public Board boardShouldHaveAPlaceholderAt2_3_2(Board board) throws BoardException
 	{
 		Cube cube = board.getCubeAt(2, 3, 2);
 		
@@ -107,7 +108,7 @@ public class BoardTest
 	}
 	
 	@Given("boardShouldHaveOneRealCubeAt2_2_2")
-	public Board boardShouldHaveAPlaceholderAt2_2_1(Board board)
+	public Board boardShouldHaveAPlaceholderAt2_2_1(Board board) throws BoardException
 	{
 		Cube cube = board.getCubeAt(2, 2, 1);
 		
@@ -117,7 +118,7 @@ public class BoardTest
 	}
 	
 	@Given("boardShouldHaveOneRealCubeAt2_2_2")
-	public Board boardShouldHaveAPlaceholderAt2_2_3(Board board)
+	public Board boardShouldHaveAPlaceholderAt2_2_3(Board board) throws BoardException
 	{
 		Cube cube = board.getCubeAt(2, 2, 3);
 		
@@ -153,7 +154,7 @@ public class BoardTest
 	}
 	
 	@Given("addCubeAt1_2_2")
-	public Board checkCubesAfterAddCubeAt1_2_2(Board board)
+	public Board checkCubesAfterAddCubeAt1_2_2(Board board) throws BoardException
 	{
 		assert(board.getCubeAt(1, 2, 2).getState().equals(CubeState.REAL));
 		assert(board.getCubeAt(3, 2, 2).getState().equals(CubeState.PLACEHOLDER));
@@ -198,7 +199,7 @@ public class BoardTest
 	}
 	
 	@Given("addCubeAdd0_2_2")
-	public Board checkCubesAfterAddCubeAt0_2_2(Board board)
+	public Board checkCubesAfterAddCubeAt0_2_2(Board board) throws BoardException
 	{
 		assert(board.getCubeAt(1, 2, 2).getState().equals(CubeState.REAL));
 		assert(board.getCubeAt(3, 2, 2).getState().equals(CubeState.PLACEHOLDER));
@@ -241,7 +242,7 @@ public class BoardTest
 	}
 	
 	@Given("removeCubeTest")
-	public Board checkBoard(Board board)
+	public Board checkBoard(Board board) throws BoardException
 	{
 		assertThat(board.getRealCubes().size(),equalTo(3));
 		assertThat(board.getPlaceholderCubes().size(),equalTo(13));
@@ -277,7 +278,7 @@ public class BoardTest
 	}
 	
 	@Given("removeCubeAt1_2_2")
-	public Board checkBoardAfterRemoveCubeAt1_2_2(Board board)
+	public Board checkBoardAfterRemoveCubeAt1_2_2(Board board) throws BoardException
 	{
 		assertThat(board.getRealCubes().size(),equalTo(2));
 		assertThat(board.getPlaceholderCubes().size(),equalTo(10));
@@ -313,7 +314,7 @@ public class BoardTest
 	}
 	
 	@Given("removeCubeAt2_2_2")
-	public Board checkBoardAfterRemoveCubeAt2_2_2(Board board)
+	public Board checkBoardAfterRemoveCubeAt2_2_2(Board board) throws BoardException
 	{
 		assertThat(board.getRealCubes().size(),equalTo(1));
 		assertThat(board.getPlaceholderCubes().size(),equalTo(5));
@@ -355,7 +356,7 @@ public class BoardTest
 	}
 	
 	@Given("basicBoardTest")
-	public Board allCubesShouldBeLocked(Board board)
+	public Board allCubesShouldBeLocked(Board board) throws BoardException
 	{
 		for(int x = 0; x<board.getMaxX();x++)
 		{
