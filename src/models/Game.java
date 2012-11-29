@@ -78,10 +78,10 @@ public class Game
 		basicCubes.add(new Cube(4,1,1));
 		
 		//Add testplayer
-		Player player = new Player("TestPlayer", Colour.BLUE);
-		this.players.add(player);
-		
-		basicCubes.get(3).addPlayer(player, FaceDirection.DOWN); //DEBUG!
+//		Player player = new Player("TestPlayer", Colour.BLUE);
+//		this.players.add(player);
+//		
+//		basicCubes.get(3).addPlayer(player, FaceDirection.DOWN); //DEBUG!
 		
 		this.board = new Board(basicCubes);
 	}

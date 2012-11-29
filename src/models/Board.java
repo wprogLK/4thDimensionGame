@@ -8,6 +8,8 @@ import java.util.Arrays;
 
 import org.lwjgl.opengl.GL11;
 
+import exceptions.BoardException;
+
 import annotations.OnlyForTesting;
 
 import models.Cube.CubeState;
@@ -103,25 +105,27 @@ public class Board
 	
 	private void resetCurrentSelectedFaceDirection()
 	{
-		ArrayList<Cube> neighbours = this.getNeighbourCubesOf(this.currentSelectedCube);
+//		ArrayList<Cube> neighbours = this.getNeighbourCubesOf(this.currentSelectedCube);
+//		
+//		for(Cube neighbour:neighbours)
+//		{
+//			if(!neighbour.getState().equals(CubeState.REAL) && !neighbour.getState().equals(CubeState.LOCKED))
+//			{
+//				FaceDirection neighbourFaceDirection = this.currentSelectedCube.getNeighbourDirection(neighbour);
+//				FaceDirection commonFace = neighbourFaceDirection.getOppositeDirection();
+//				
+//				if(neighbour.isFaceEmpty(commonFace) && this.currentSelectedCube.isFaceEmpty(neighbourFaceDirection))
+//				{
+//					this.currentSelectedFaceDirection = commonFace;
+//					System.out.println("current selected face is " + neighbourFaceDirection);
+//					this.currentSelectedCube.setSelectedFace(neighbourFaceDirection);
+//					
+//					break;
+//				}
+//			}
+//		}
 		
-		for(Cube neighbour:neighbours)
-		{
-			if(!neighbour.getState().equals(CubeState.REAL) && !neighbour.getState().equals(CubeState.LOCKED))
-			{
-				FaceDirection neighbourFaceDirection = this.currentSelectedCube.getNeighbourDirection(neighbour);
-				FaceDirection commonFace = neighbourFaceDirection.getOppositeDirection();
-				
-				if(neighbour.isFaceEmpty(commonFace) && this.currentSelectedCube.isFaceEmpty(neighbourFaceDirection))
-				{
-					this.currentSelectedFaceDirection = commonFace;
-					System.out.println("current selected face is " + neighbourFaceDirection);
-					this.currentSelectedCube.setSelectedFace(neighbourFaceDirection);
-					
-					break;
-				}
-			}
-		}
+		this.isAnyFacePossible();
 	}
 	
 	private ArrayList<Cube> getNeighbourCubesOf(Cube cube)
@@ -514,9 +518,16 @@ public class Board
 	}
 	
 	@OnlyForTesting
-	public Cube getCubeAt(int x,int y,int z)
+	public Cube getCubeAt(int x,int y,int z) throws BoardException
 	{
-		return this.board[x][y][z];
+		if(x<0 || x>=this.maxX || y<0 || y>=this.maxY || z<0 || z>=this.maxZ)
+		{
+			throw new BoardException("The coordinates ( " + x + " | " + y + "  | " + z + " ) are out of the board!");
+		}
+		else
+		{
+			return this.board[x][y][z];
+		}
 	}
 	
 	@OnlyForTesting
@@ -691,111 +702,127 @@ public class Board
 	private void changeSelectedFace(int dx, int dy, int dz)
 	{
 		
-		int newX = this.currentSelectedCube.getBoardCoordinateX()+dx;
-		int newY = this.currentSelectedCube.getBoardCoordinateX()+dy;
-		int newZ = this.currentSelectedCube.getBoardCoordinateX()+dz;
+		FaceDirection newFaceOnTheSameCube = this.currentSelectedFaceDirection.getNextFaceDirection(dx, dy, dz);
 		
-		FaceDirection moveDirection;
+		int newX = this.currentSelectedCube.getBoardCoordinateX()+newFaceOnTheSameCube.getRelPosXNeighbour();
+		int newY = this.currentSelectedCube.getBoardCoordinateY()+newFaceOnTheSameCube.getRelPosYNeighbour();
+		int newZ = this.currentSelectedCube.getBoardCoordinateZ()+newFaceOnTheSameCube.getRelPosZNeighbour();
 		
+		Cube diagonalNeighbourCube = null;
 		
-		if(dx!=0)
+		try
 		{
-			if(dx<0)
-			{
-				moveDirection = FaceDirection.LEFT;
-			}
-			else
-			{
-				moveDirection = FaceDirection.RIGHT;
-			}
-			
-			if(newX<0) //OutOfTheBoard
-			{
-				this.moveFace(moveDirection);
-			}
-			else if(newX>=this.maxX) //OutOfTheBoard
-			{
-				this.moveFace(moveDirection);
-			}
-			else
-			{
-				if(this.isRealNeigbourThere(newX, newY, newZ))
-				{
-					//TODO move cube
-					System.out.println("Move cube!");
-				}
-				else
-				{
-					//TODO move face aside
-					System.out.println("Move face!");
-				}
-			}
+			diagonalNeighbourCube = this.getDiagonalNeighbourCube(newFaceOnTheSameCube,this.currentSelectedCube);
+		} 
+		catch (BoardException e)
+		{
+			System.out.println(e.getMessage()); //TODO do nothing
 		}
-		else if(dy!=0)
-		{
-			if(dy<0)
+			if(diagonalNeighbourCube!=null && diagonalNeighbourCube.getState().equals(CubeState.REAL)) //TODO: Test this!
 			{
-				moveDirection = FaceDirection.DOWN;
-			}
-			else
-			{
-				moveDirection = FaceDirection.UP;
-			}
-			
-			if(newY<0)
-			{
-				
-			}
-			else if(newY>=this.maxY)
-			{
-				
-			}
-			else
-			{
-				
-			}
-		}
-		else if(dz!=0)
-		{
-			if(dz<0)
-			{
-				moveDirection = FaceDirection.BACK;
-			}
-			else
-			{
-				moveDirection = FaceDirection.FRONT;
-			}
-			
-			if(newZ<0)
-			{
+//				System.out.println("------- real diagonalNeighbourFound! -------" );
 
-			}
-			else if(newZ>=this.maxZ)
-			{
+				this.moveFace(-dx,-dy,-dz);
 				
+				this.currentSelectedCube.resetAllFaces();
+				this.currentSelectedCube = diagonalNeighbourCube;
+				this.currentSelectedCube.setSelectedFace(this.currentSelectedFaceDirection);
 			}
 			else
 			{
-				if(this.isRealNeigbourThere(newX, newY, newZ))
+				//diagonal neighbour is not real -> ignore diagonal neighbour
+				if(newX<0 || newX>=this.maxX || newY<0 || newY>=this.maxY || newZ<0 || newZ>=this.maxZ) //Cube would be out of the board!
 				{
-					//TODO move cube
+					System.out.println("Move face because the new cube pos would be out of the grid!");
+					this.moveFace(dx, dy, dz);
 				}
 				else
 				{
-					//TODO move face aside
+					System.out.println("new cube is at " + newX + " | " + newY + " | " + newZ);
+					System.out.println("Current cube is at " + Arrays.toString(this.currentSelectedCube.getCoordinates()));
+					if(this.isRealNeigbourThere(newX, newY, newZ))
+					{
+						//TODO move cube
+						System.out.println("Move cube!");
+						
+						newFaceOnTheSameCube = this.currentSelectedFaceDirection.getNextFaceDirection(dx, dy, dz);
+						
+						newX = this.currentSelectedCube.getBoardCoordinateX()+newFaceOnTheSameCube.getRelPosXNeighbour();
+						newY = this.currentSelectedCube.getBoardCoordinateY()+newFaceOnTheSameCube.getRelPosYNeighbour();
+						newZ = this.currentSelectedCube.getBoardCoordinateZ()+newFaceOnTheSameCube.getRelPosZNeighbour();
+						
+						try 
+						{
+							Cube newCube = this.getCubeAt(newX, newY, newZ);
+							
+							this.currentSelectedCube.resetAllFaces();
+							this.currentSelectedCube = newCube;
+							this.currentSelectedCube.setSelectedFace(this.currentSelectedFaceDirection);
+						} 
+						catch (BoardException e) 
+						{
+							System.out.println("Fatal Error: at position ( " + newX + " | " + newY + " | " + newZ + " ) should be a real cube, but there is no cube at all! \n " + e.getMessage()); //TODO test this! (does this exeption happend here?)
+						}
+						
+					}
+					else
+					{
+						//TODO move face aside
+						System.out.println("Move face because there is no real neighbour on the side!");
+						this.moveFace(dx, dy, dz);
+					}
 				}
 			}
-		}
 	}
 	
-	private void moveFace(FaceDirection direction) //TODO DEBUG & TEST THIS!
+	private Cube getDiagonalNeighbourCube(FaceDirection newFaceOnTheSameCube, Cube currentCube) throws BoardException 
 	{
+		int[] relPosNeighbourCommonSelectedFace = this.currentSelectedFaceDirection.getRelPosNeighbour();
+		int[] relPosNeighbourNewFace = newFaceOnTheSameCube.getRelPosNeighbour();
+		int[] absBoardPosCurrentCube = currentCube.getCoordinates();
 		
+		int[] relPosDiagonalNeighbourCube = new int[3];
+		int[] absBoardPosDiagonalNeighbourCube = new int[3];
+		
+		for(int i = 0; i<3;i++)
+		{
+			relPosDiagonalNeighbourCube[i] = relPosNeighbourCommonSelectedFace[i]+relPosNeighbourNewFace[i];
+			absBoardPosDiagonalNeighbourCube[i] = relPosDiagonalNeighbourCube[i]+absBoardPosCurrentCube[i];
+		}
+//		System.out.println("oldFaceCube is " + Arrays.toString(relPosNeighbourCommonSelectedFace));
+//		System.out.println("newFaceCube is " + Arrays.toString(relPosNeighbourNewFace));
+//		
+//		System.out.println("DiagonalCubeRelPos is " + Arrays.toString(relPosDiagonalNeighbourCube));
+//		System.out.println("DiagonalCubeAbsBoardPos is " + Arrays.toString(absBoardPosDiagonalNeighbourCube));
+		
+		Cube diagonalCube = this.getCubeAt(absBoardPosDiagonalNeighbourCube[0], absBoardPosDiagonalNeighbourCube[1], absBoardPosDiagonalNeighbourCube[2]);
+		
+//		assert(!diagonalCube.equals(currentCube));
+		
+		return diagonalCube;
+	}
+
+	private void moveFace(int dx, int dy, int dz)
+	{
+		this.currentSelectedCube.resetAllFaces();
+		
+		this.currentSelectedFaceDirection = this.currentSelectedFaceDirection.getNextFaceDirection(dx, dy, dz);
+		
+		this.currentSelectedCube.setSelectedFace(currentSelectedFaceDirection);
 	}
 	
 	private boolean isRealNeigbourThere(int x,int y, int z)
 	{
-		return this.getCubeAt(x, y, z).getState().equals(CubeState.REAL);
+		boolean isReal;
+		try 
+		{
+			return this.getCubeAt(x, y, z).getState().equals(CubeState.REAL);
+		} 
+		catch (BoardException e) 
+		{
+			System.out.println(e.getMessage());
+			return false;
+		}
 	}
 
 	private void changeSelectedCube(int dx,int dy, int dz)
@@ -866,24 +893,92 @@ public class Board
 		{
 			if(mode.equals(SelectionMode.FACEMode))
 			{
-				this.currentSelectedCube.setSelected(false);
-				this.currentSelectedCube.setSelectedFace(this.currentSelectedFaceDirection);
+				if(this.currentSelectedCube.getState().equals(CubeState.REAL))
+				{
+					if(this.isAnyFacePossible())
+					{
+						this.currentSelectedCube.setSelected(false);
+						
+						System.out.println("Change to FACEMode! The current selected faceDirection is " + currentSelectedFaceDirection);
+					
+						this.currentSelectedCube.setSelectedFace(this.currentSelectedFaceDirection);
+						
+						this.currentSelectionMode = mode;
+						System.out.println("NEW Selection mode is " + mode);
+					}
+					else
+					{
+						System.out.println("Error: At the current cube position it's not possible to change into the FACEMode because of the current selected cube has at every face a real neighbour cube! Select a real cube with less than 4 real neighbours on the board and change there into the FACEMode."); //TODO throw an exception
+					}
+				}
+				else
+				{
+					System.out.println("Error: At the current cube position it's not possible to change into the FACEMode because of the current selected cube is not a real cube! Select a real cube on the board and change there into the FACEMode."); //TODO throw an exception
+				}
 			}
-			else if(mode.equals(SelectionMode.FACEMode))
+			else if(mode.equals(SelectionMode.CUBEMode))
 			{
 				this.currentSelectedCube.setSelected(true);
 				this.currentSelectedCube.resetAllFaces();
+				
+				this.currentSelectionMode = mode;
+				System.out.println("NEW Selection mode is " + mode);
 			}
 			
-			this.currentSelectionMode = mode;
-			System.out.println("NEW Selection mode is " + mode);
+			
 		}
-		
-	
-		
-		
 	}
 	
+	private boolean isAnyFacePossible() 
+	{
+		if(this.isFacePossible(this.currentSelectedFaceDirection))
+		{
+			return true; 
+		}
+		else
+		{
+			for(FaceDirection otherFace:FaceDirection.values())
+			{
+				if(this.isFacePossible(otherFace))
+				{
+					System.out.println("otherFace possible: " + otherFace);
+					this.currentSelectedFaceDirection = otherFace;
+					return true;
+				}
+				else
+				{
+					continue;
+				}
+			}
+			
+			return false;
+		}
+	}
+
+	private boolean isFacePossible(FaceDirection face) 
+	{
+		if(face!=null)
+		{
+			int neighbourX = face.getRelPosXNeighbour()+this.currentSelectedCube.getBoardCoordinateX();
+			int neighbourY = face.getRelPosYNeighbour()+this.currentSelectedCube.getBoardCoordinateY();
+			int neighbourZ = face.getRelPosZNeighbour()+this.currentSelectedCube.getBoardCoordinateZ();
+			
+			try 
+			{
+				Cube neighbourCube = this.getCubeAt(neighbourX, neighbourY, neighbourZ);
+				return !neighbourCube.getState().equals(CubeState.REAL); //TODO Test this!
+			}
+			catch (BoardException e) 
+			{
+				return true; //because the neighbour isn't possible and the face is free
+			}
+		}
+		else
+		{
+			return false;
+		}
+	}
+
 	//////////
 	//RENDER//
 	//////////

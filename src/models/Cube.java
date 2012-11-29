@@ -433,6 +433,11 @@ public class Cube
 	public void setSelected(boolean value)
 	{
 		this.isSelected = value;
+		
+		if(!value)
+		{
+			this.resetAllFaces();
+		}
 	}
 	
 	@Override
@@ -458,6 +463,7 @@ public class Cube
 	
 	public void setSelectedFace(FaceDirection face) 
 	{
+		System.out.println("Switch face to: " + face);
 		switch(face)
 		{
 			case UP:
@@ -521,10 +527,15 @@ public class Cube
 //		GL11.glPopMatrix();
 		
 		this.faceBack.render();
+		this.setColour();
 		this.faceFront.render();
+		this.setColour();
 		this.faceDown.render();
+		this.setColour();
 		this.faceUp.render();
+		this.setColour();
 		this.faceRight.render();
+		this.setColour();
 		this.faceLeft.render();
 	}
 	
@@ -688,7 +699,7 @@ public class Cube
 			if(!this.isEmtpy())
 			{
 				GL11.glColor4f(1.0f,0.0f, 1.0f, 1.0f);
-//				System.out.println("face is not empty");  //TODO IMPORTANT: DEBGU THIS!!!! The direction face is inverse (?)
+//				System.out.println("face is not empty");  //TODO IMPORTANT: DEBUG THIS!!!! The direction face is inverse (?)
 			}
 			//TODO render face & player
 			
