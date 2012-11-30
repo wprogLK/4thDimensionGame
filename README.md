@@ -1,64 +1,68 @@
-Here at GitHub, we're no strangers to hosting or sponsoring hackathons. With the growing number of games and game development resources on GitHub, we thought it was about time to throw our very own game jam!
+> #4thDimensionGame
+> think in a new dimension and outside the box!
 
-## The Challenge
+### Main features
+* think in a new dimension and outside the box - the game **board** is in **all three dimensions**
+* roll a cube like a normal dice and it will change its property, then place (push) the cube at a possible position on the board
+* Be careful! The **4th dimension** can **push/pull cubes together** and will crush you from time to time.
+* some sides of some cubes can trigger **special actions** like rotate cubes, destroy a cube, mirror cubes on an axis
+* collect as many **golden mini cubes** as you can to **buy new special cubes with special powers**
+* **special cubes** (like the **companion cube**, classic **mario cube**, a typical **minecraft cube**) with special powers  
 
-You have the entire month of November to create a **web-based** game *loosely* built around one or more of the following themes:
+### Links
+[play the game now](http://wproglk.github.com/4thDimensionGame/play)
+[GitHub page of 4thDimensionGame](http://wproglk.github.com/4thDimensionGame)
 
-* forking (or forks)
-* branching (or branches)
-* cloning (or clones)
-* pushing
-* pulling
+### Goal
+Collect as many golden mini cubes as you can during the game. You can buy special cubes with special powers with this mini cubes during the game, but is it worth it? It's up to you! Maybe you can use a special cube for your own advantage to get even more mini golden cubes or to block, prevent or harm an opponent!
 
-What do we mean by **loosely** based on these concepts? We literally mean, *loosely* based. Some examples might be a FPS where you throw forks at water balloons, an educational game about DNA cloning, or perhaps a platformer where you push and pull objects.
+### Rules
+The 4th dimension game is a 3D board game for 2 to 4 players. First each player roll a die. The player with the highest score begins. Each player set at the beginning of the game a token on one side of a cube on the board
 
-Your game. Your rules. You can participate as an individual or as a team. You're encouraged to use open source libraries, frameworks, graphics, and sounds.
+**Step 1:**
+Player decide if he will use a random cube or a special cube of the player which he bought in an earlier round of the game.
 
-## Prizes
+**Step 2:**
+Roll the cube
 
-We have 5 shiny new iPads with Retina displays (64GB wifi models) to give to our winners (or Apple Store Credit equivalent). Runners up will receive GitHub swag of their choice ($100 credit for the [GitHub Shop](http://shop.github.com/)). If you have a team submission, we'll give you Apple Store credit equal to the value of the iPad. You can split it with your teammates as appropriate.
+**Step 3:**
+The rolled cube changes its property and shows a number of pips which the player can move his token in one and only one direction per turn.
 
-All of the winners and runners up will be showcased on our blog.
+**Step 4:**
+Select a possible place (green cubes) for adding the cube there.
 
-<img src="http://i.imgur.com/lxZrD.png" style="border:0;">
+**Step 5:**
+Select a the direction (a side) in which you want to move.
 
-### Everyone's a winner!
+**Step 6:**
+The token moves to in the given direction and collect all mini golden cubes on its way to the destination face of a cube.
 
-All participants will receive a limited edition [Coderwall](http://www.coderwall.com) badge as shown above. Winners and runners up will also get their own special version of it.
+**Step 7:**
+Arrived at the destination side of a cube trigger the event of side if it has one.
 
-## Judging
+**Step 8:**
+You can now buy special cubes with your collected mini golden cubes if you want
 
-We have a number of awesome judges who graciously volunteered to take a look at all the entries!
+**Step 9:**
+next player
 
-* [David Czarnecki](http://twitter.com/CzarneckiD), Lead Engineer at Agora Games
-* [Eric Preisz](https://twitter.com/epreisz), CEO of GarageGames
-* [Matt Hackett](https://twitter.com/#!/richtaur), Co-founder of Lost Decade Games
-* [Lee Reilly](http://twitter.com/leereilly), Gamer Dad and Software Developer at GitHub
-* [Romana Ramzan](https://twitter.com/Manak/), Denki's Player Champion. PhD Researcher. Organiser of Scottish Game Jam.
+###Controller
+Use keys **Q/Y** to move in the z-axis (back/forth)
 
-## Rules
+Use keys **w/s** to move in the y-axis (up/down)
 
-* To qualify for entry as an **individual** you must fork the [github/game-off-2012](https://github.com/github/game-off-2012) repository to your individual account
-* To qualify for entry as a **team** you must fork the [github/game-off-2012](https://github.com/github/game-off-2012) to a [free organization account](https://github.com/settings/organizations)
-* All entries must be web-based i.e. playable in a browser. HTML5, WebGL, Unity, Torque 3D, Node JS, Flash is all possible - just be sure the source is made available on your fork.
-* You must be over the age of 13
+Use keys **a/d** to move in the x-axis (left/right)
 
-## Instructions
+Use keys **1/2** to switch between the selection modes (CubeSelectionMode/SideSelectionMode)
 
-* If you don't already have a GitHub account, [sign up now](https://github.com/signup/free) - it's free!
-* Fork the [github/game-off-2012](https://github.com/github/game-off-2012) repository to your individual account (or to a free organization account)
-* Be sure to follow @github on Twitter for updates
-* Make sure your code is pushed to the master branch of before Dec 1st!
-* Make sure you have a README file with a brief description, what open source projects (if any) you used, and a screenshot.
-* Your repo should have a brief description and a URL where the game is playable entered into the fields shown below (this will make our judging process easier):
+Use key **SPACE** to add a cube at the current position
 
-![](https://img.skitch.com/20121010-x2ecpu95fi91us6hbfehg2dgit.png)
+(The controller is designed for a QWERTZ-keyboard)
 
-Winners will be announced before Christmas :santa:
+###Used libraries
+[The lightweight java game library (LWJGL)](http://www.lwjgl.org/)
 
-# Comments / Questions / Help
-
-* New to Git, GitHub, and/or version control? Check out our [help documentation](https://help.github.com/) to get started!
-* Questions about Git/GitHub? Please email support@github.com and be sure to include 'GitHub Game Off' in the subject.
-* Questions specific to the GitHub Game Off? Please [create an issue](https://github.com/github/game-off-2012/issues/new). That will be the offical FAQ.
-* The official Twitter hashtag is [#ggo12](https://twitter.com/search/realtime?q=%23ggo12).
+###What I want to say...
+The last few weeks were very interesting, I had a lot of fun and sometimes they have really challenged me. I learned something about graphic programming and how you should do things or not.
+This project is far away from completeness yet! At the moment it's "only" possible to add new cubes at the possible places and remove cubes. You can also select a cube or a side of a cube and move. Switching between CUBESelectionMode and SIDESelectionMode is also possible.
+I know, my code is a real mess but it does what it should do.
