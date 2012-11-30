@@ -1,0 +1,85 @@
+Example of linkList with listIterator:
+
+LinkedList<String> linkedList = new LinkedList<String>();
+		linkedList.addFirst("D");
+		linkedList.addFirst("C");
+		linkedList.addFirst("B");
+		linkedList.addFirst("A");
+		
+		ListIterator<String> lIterator = linkedList.listIterator();
+		System.out.println("next: " + lIterator.next());
+		
+		System.out.println("next2: " + lIterator.next());
+		lIterator.remove();
+		lIterator.add("NEW B");
+		System.out.println("next3: " + lIterator.next());
+		System.out.println("next4: " + lIterator.next());
+		
+		while(lIterator.hasPrevious())
+		{
+			lIterator.previous();
+		}
+		
+		while(lIterator.hasNext())
+		{
+			System.out.println("NEXT : " + lIterator.next());
+		}
+		
+OUTPUT:
+next: A
+next2: B
+next3: C
+next4: D
+NEXT : A
+NEXT : NEW B
+NEXT : C
+NEXT : D
+
+////////////////////////////////////
+DELETE
+	LinkedList<String> linkedList = new LinkedList<String>();
+		linkedList.addFirst("E");
+		linkedList.addFirst("D");
+		linkedList.addFirst("C");
+		linkedList.addFirst("B");
+		linkedList.addFirst("A");
+		
+		ListIterator<String> lIterator = linkedList.listIterator();
+		System.out.println("A:" + lIterator.next());
+		
+		System.out.println("B: " + lIterator.next());
+		
+		System.out.println("C: " + lIterator.next());
+		System.out.println("D: " + lIterator.next());
+		
+		System.out.println("prevD: " + lIterator.previous());
+		System.out.println("prevC: " + lIterator.previous());
+		lIterator.remove(); //remove C
+		System.out.println("D2: " + lIterator.next());
+		lIterator.remove(); //remove D
+		lIterator.add("NEW CD");
+		
+		
+		while(lIterator.hasPrevious())
+		{
+			lIterator.previous();
+		}
+		
+		while(lIterator.hasNext())
+		{
+			System.out.println("NEXT : " + lIterator.next());
+		}
+		
+		OUTPUT:
+A: A
+B: B
+C: C
+D: D
+prevD: D
+prevC: C
+D2: D
+NEXT : A
+NEXT : B
+NEXT : NEW CD
+NEXT : E
+		
