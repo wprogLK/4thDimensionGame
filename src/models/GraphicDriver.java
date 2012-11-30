@@ -151,8 +151,8 @@ public class GraphicDriver implements IGraphicDriver
 			Display.update();
 			Display.sync(60);
 		}
-		
-		this.destroy();
+		System.out.println("Game over or you closed the game!"); //TODO
+		Display.destroy();
 	}
 	
 	public void destroy()

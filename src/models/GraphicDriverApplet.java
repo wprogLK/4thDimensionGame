@@ -120,80 +120,6 @@ public class GraphicDriverApplet extends GraphicDriver
 		//not needed to do a setup display (already done in init())
 	}
 	
-//	protected void setupDisplay()
-//	{
-//		System.out.println("setupDisplay in applet");
-//		
-////		this.applet = new Applet();
-//		this.applet.setLayout(new BorderLayout());
-//		try
-//		{
-//			this.displayParent = new Canvas()
-//			{
-//				public final void addNotify()
-//				{
-//					System.out.println("addNotify canvas");
-//					super.addNotify();
-//					startDriver();
-//				}
-//				
-//				public final void removeNotify()
-//				{
-//					System.out.println("removeNotify canvas");
-//					stopDriver();
-//					super.removeNotify();
-//				}
-//				
-//			};
-//			
-////			try {
-////				Display.setDisplayMode(new DisplayMode(this.windowWidth, this.windowHeight));
-////			} catch (LWJGLException e1) {
-////				// TODO Auto-generated catch block
-////				e1.printStackTrace();
-////			}
-//			
-//			this.displayParent.setSize(this.windowWidth, this.windowHeight);
-//			this.applet.setSize(this.windowWidth, this.windowHeight);
-//			System.out.println("add displayParent to applet...");
-//			this.applet.add(this.displayParent);
-//			System.out.println("... added done!");
-//			this.displayParent.setFocusable(true);
-//			this.displayParent.requestFocus();
-//			this.displayParent.setIgnoreRepaint(true);
-//			this.applet.setVisible(true);
-//			
-//		} 
-//		catch (Exception e) 
-//		{
-//			System.err.println(e);
-//			throw new RuntimeException("Unable to create display");
-//		}
-//		
-//		try 
-//		{
-//			Display.setParent(this.displayParent);
-//			System.out.println("is displayable? " + Display.getParent().isDisplayable());
-////			Display.create();
-//		} 
-//		catch (LWJGLException e) 
-//		{
-//			System.out.println("ERROR IN APPLET!");
-//			e.printStackTrace();
-//		}
-//		
-//		System.out.println("SETUP DISPLAY DONE IN APPLET!");
-//	}
-	
-//TODO	
-//	@Override
-//	public void startDriver()
-//	{
-//		System.out.println("Start driver");
-//		
-//		Display.setParent(this.displayParent);
-//		Display.create();
-//	}
 	
 	public void start()
 	{
@@ -230,13 +156,11 @@ public class GraphicDriverApplet extends GraphicDriver
 					
 //					runDriver();
 					
-					setupGL();
-					
 					getDelta();
 					lastFPS = getTime();
+					runGameLoop();
 				}
 			};
-			System.out.println("start game thread!");
 			gameThread.start();
 		}
 		
@@ -256,8 +180,9 @@ public class GraphicDriverApplet extends GraphicDriver
 		catch(InterruptedException e)
 		{
 			e.printStackTrace();
-			
 		}
+		
+		
 //		Display.destroy();
 	}
 	
@@ -265,7 +190,7 @@ public class GraphicDriverApplet extends GraphicDriver
 	public void destroy()
 	{
 		this.applet.remove(this.displayParent);
-//		super.destroy(); //TODO necessary?
+		super.destroy(); //TODO necessary?
 	}
 
 }
