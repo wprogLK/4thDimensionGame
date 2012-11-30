@@ -60,11 +60,13 @@ public class GraphicDriver implements IGraphicDriver
 	
 	public void start()
 	{
+		System.out.println("start graphicDriver");
 		runDriver();
 	}
 	
 	public void runDriver()
 	{
+		System.out.println("runGraphic driver");
 		this.setupGL();
 		
 		this.getDelta();
@@ -75,7 +77,7 @@ public class GraphicDriver implements IGraphicDriver
 	
 	public final void startDriver()
 	{
-		System.out.println("Start driver basic");
+		System.out.println("StartDriver basic");
 		this.setupDisplay();
 		
 //		try 
@@ -88,7 +90,6 @@ public class GraphicDriver implements IGraphicDriver
 //			e.printStackTrace();
 //		}
 //		
-		System.out.println("Start driver basic");
 		this.start();
 	}
 	
@@ -100,10 +101,13 @@ public class GraphicDriver implements IGraphicDriver
 	
 	protected void setupDisplay()
 	{
+		System.out.println("setupDisplay in GraphicDriver");
+		
 		try 
 		{
 			Display.setDisplayMode(new DisplayMode(this.windowWidth, this.windowHeight));
 			Display.create();
+			System.out.println("Display succesfully created!");
 		} 
 		catch (LWJGLException e) 
 		{

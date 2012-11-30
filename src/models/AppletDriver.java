@@ -9,11 +9,15 @@ public class AppletDriver extends Applet
 	
 	public void init()
 	{
+		System.out.println("init applet");
+		
 		this.game = new Game();
 		this.graphicDriver = this.game.getGraphicDriverApplet();
 		
 		this.graphicDriver.addApplet(this);
+		this.graphicDriver.init();
 		
-		this.graphicDriver.startDriver();
+		this.game.start();
+//		this.graphicDriver.startDriver();
 	}
 }

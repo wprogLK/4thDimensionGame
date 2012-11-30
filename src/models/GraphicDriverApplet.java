@@ -46,13 +46,13 @@ public class GraphicDriverApplet extends GraphicDriver
 	
 	public void addApplet(AppletDriver appletDriver)
 	{
+		System.out.println("add appletDriver in graphicDriverApplet");
 		this.applet = appletDriver;
 	}
 	
-	
-	protected void setupDisplay()
+	public void init()
 	{
-//		System.out.println("setupDisplay in applet");
+		System.out.println("init in applet");
 		
 //		this.applet = new Applet();
 		this.applet.setLayout(new BorderLayout());
@@ -62,12 +62,14 @@ public class GraphicDriverApplet extends GraphicDriver
 			{
 				public final void addNotify()
 				{
+					System.out.println("addNotify canvas");
 					super.addNotify();
 					startDriver();
 				}
 				
 				public final void removeNotify()
 				{
+					System.out.println("removeNotify canvas");
 					stopDriver();
 					super.removeNotify();
 				}
@@ -83,7 +85,9 @@ public class GraphicDriverApplet extends GraphicDriver
 			
 			this.displayParent.setSize(this.windowWidth, this.windowHeight);
 			this.applet.setSize(this.windowWidth, this.windowHeight);
+			System.out.println("add displayParent to applet...");
 			this.applet.add(this.displayParent);
+			System.out.println("... added done!");
 			this.displayParent.setFocusable(true);
 			this.displayParent.requestFocus();
 			this.displayParent.setIgnoreRepaint(true);
@@ -111,6 +115,71 @@ public class GraphicDriverApplet extends GraphicDriver
 		System.out.println("SETUP DISPLAY DONE IN APPLET!");
 	}
 	
+//	protected void setupDisplay()
+//	{
+//		System.out.println("setupDisplay in applet");
+//		
+////		this.applet = new Applet();
+//		this.applet.setLayout(new BorderLayout());
+//		try
+//		{
+//			this.displayParent = new Canvas()
+//			{
+//				public final void addNotify()
+//				{
+//					System.out.println("addNotify canvas");
+//					super.addNotify();
+//					startDriver();
+//				}
+//				
+//				public final void removeNotify()
+//				{
+//					System.out.println("removeNotify canvas");
+//					stopDriver();
+//					super.removeNotify();
+//				}
+//				
+//			};
+//			
+////			try {
+////				Display.setDisplayMode(new DisplayMode(this.windowWidth, this.windowHeight));
+////			} catch (LWJGLException e1) {
+////				// TODO Auto-generated catch block
+////				e1.printStackTrace();
+////			}
+//			
+//			this.displayParent.setSize(this.windowWidth, this.windowHeight);
+//			this.applet.setSize(this.windowWidth, this.windowHeight);
+//			System.out.println("add displayParent to applet...");
+//			this.applet.add(this.displayParent);
+//			System.out.println("... added done!");
+//			this.displayParent.setFocusable(true);
+//			this.displayParent.requestFocus();
+//			this.displayParent.setIgnoreRepaint(true);
+//			this.applet.setVisible(true);
+//			
+//		} 
+//		catch (Exception e) 
+//		{
+//			System.err.println(e);
+//			throw new RuntimeException("Unable to create display");
+//		}
+//		
+//		try 
+//		{
+//			Display.setParent(this.displayParent);
+//			System.out.println("is displayable? " + Display.getParent().isDisplayable());
+////			Display.create();
+//		} 
+//		catch (LWJGLException e) 
+//		{
+//			System.out.println("ERROR IN APPLET!");
+//			e.printStackTrace();
+//		}
+//		
+//		System.out.println("SETUP DISPLAY DONE IN APPLET!");
+//	}
+	
 //TODO	
 //	@Override
 //	public void startDriver()
@@ -123,6 +192,7 @@ public class GraphicDriverApplet extends GraphicDriver
 	
 	public void start()
 	{
+		System.out.println("start graphicDriverApplet");
 //		Display.setParent(this.displayParent);
 ////		Display.create();
 //		
@@ -133,8 +203,8 @@ public class GraphicDriverApplet extends GraphicDriver
 //		
 //		this.runGameLoop();
 		
-		if(gameThread!=null)
-		{
+//		if(gameThread==null)
+//		{
 			this.gameThread = new Thread()
 			{
 				public void run()
@@ -161,10 +231,11 @@ public class GraphicDriverApplet extends GraphicDriver
 					lastFPS = getTime();
 				}
 			};
+			System.out.println("start game thread!");
 			gameThread.start();
 		}
 		
-		}
+//		}
 	
 	
 	@Override

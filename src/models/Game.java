@@ -158,8 +158,9 @@ public class Game
 	//PRIVATE METHODS//
 	///////////////////
 	
-	private void start()
+	public void start()
 	{
+		System.out.println(" game start and is calling driver.startDriver()");
 		this.driver.startDriver();
 	}
 	
