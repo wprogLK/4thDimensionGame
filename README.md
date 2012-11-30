@@ -11,6 +11,7 @@
 
 ### Links
 [play the game now](http://wproglk.github.com/4thDimensionGame/play)
+
 [GitHub page of 4thDimensionGame](http://wproglk.github.com/4thDimensionGame)
 
 ### Goal
