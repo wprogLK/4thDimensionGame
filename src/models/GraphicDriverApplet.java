@@ -100,19 +100,24 @@ public class GraphicDriverApplet extends GraphicDriver
 			throw new RuntimeException("Unable to create display");
 		}
 		
-		try 
-		{
-			Display.setParent(this.displayParent);
-			System.out.println("is displayable? " + Display.getParent().isDisplayable());
+//		try 
+//		{
+//			//Display.setParent(this.displayParent);
+//			System.out.println("is displayable? " + Display.getParent().isDisplayable());
 //			Display.create();
-		} 
-		catch (LWJGLException e) 
-		{
-			System.out.println("ERROR IN APPLET!");
-			e.printStackTrace();
-		}
+//		} 
+//		catch (LWJGLException e) 
+//		{
+//			System.out.println("ERROR IN APPLET!");
+//			e.printStackTrace();
+//		}
 		
 		System.out.println("SETUP DISPLAY DONE IN APPLET!");
+	}
+	//@Override
+	protected void setupDisplay()
+	{
+		//not needed to do a setup display (already done in init())
 	}
 	
 //	protected void setupDisplay()
@@ -203,8 +208,8 @@ public class GraphicDriverApplet extends GraphicDriver
 //		
 //		this.runGameLoop();
 		
-//		if(gameThread==null)
-//		{
+		if(gameThread==null)
+		{
 			this.gameThread = new Thread()
 			{
 				public void run()
@@ -235,7 +240,7 @@ public class GraphicDriverApplet extends GraphicDriver
 			gameThread.start();
 		}
 		
-//		}
+		}
 	
 	
 	@Override
@@ -253,14 +258,14 @@ public class GraphicDriverApplet extends GraphicDriver
 			e.printStackTrace();
 			
 		}
-		Display.destroy();
+//		Display.destroy();
 	}
 	
 	@Override
 	public void destroy()
 	{
 		this.applet.remove(this.displayParent);
-		super.destroy(); //TODO necessary?
+//		super.destroy(); //TODO necessary?
 	}
 
 }
